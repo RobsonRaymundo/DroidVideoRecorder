@@ -1,0 +1,94 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .idea\
+* .idea\.name
+* .idea\compiler.xml
+* .idea\copyright\
+* .idea\copyright\profiles_settings.xml
+* .idea\encodings.xml
+* .idea\misc.xml
+* .idea\modules.xml
+* .idea\scopes\
+* .idea\scopes\scope_settings.xml
+* .idea\uiDesigner.xml
+* .idea\vcs.xml
+* .idea\workspace.xml
+* DroidVideoRecorder.apk
+* DroidVideoRecorder.iml
+* ant.properties
+* build.xml
+* out\
+* out\production\
+* out\production\DroidRecVideo\
+* out\production\DroidRecVideo\DroidRecVideo.apk
+* out\production\DroidRecVideo\DroidRecVideo.unaligned.apk
+* out\production\DroidRecVideo\com\
+* out\production\DroidRecVideo\com\droid\
+* out\production\DroidRecVideo\com\droid\recVideo\
+* out\production\DroidRecVideo\com\droid\recVideo\BuildConfig.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidActivity.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidHeadService$1.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidHeadService$2.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidHeadService$3.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidHeadService$4.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidHeadService.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidRecVideo$EnumStateRecVideo.class
+* out\production\DroidRecVideo\com\droid\recVideo\DroidRecVideo.class
+* out\production\DroidRecVideo\com\droid\recVideo\R$attr.class
+* out\production\DroidRecVideo\com\droid\recVideo\R$drawable.class
+* out\production\DroidRecVideo\com\droid\recVideo\R$id.class
+* out\production\DroidRecVideo\com\droid\recVideo\R$layout.class
+* out\production\DroidRecVideo\com\droid\recVideo\R$string.class
+* out\production\DroidRecVideo\com\droid\recVideo\R.class
+* out\production\DroidVideoRecorder\
+* out\production\DroidVideoRecorder\DroidVideoRecorder.apk
+* out\production\DroidVideoRecorder\com\
+* out\production\DroidVideoRecorder\com\droid\
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\BuildConfig.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidActivity.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidHeadService$1.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidHeadService$2.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidHeadService$3.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidHeadService.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidVideoRecorder$EnumStateRecVideo.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\DroidVideoRecorder.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\R$attr.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\R$drawable.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\R$id.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\R$layout.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\R$string.class
+* out\production\DroidVideoRecorder\com\droid\videoRecorder\R.class
+* proguard-project.txt
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
