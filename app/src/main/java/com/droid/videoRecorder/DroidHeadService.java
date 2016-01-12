@@ -21,6 +21,7 @@ public class DroidHeadService extends Service {
     private float initialTouchX;
     private float initialTouchY;
     private int orientationEvent;
+    private Context context;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -187,7 +188,7 @@ public class DroidHeadService extends Service {
         chatHead.setImageResource(R.drawable.rec);
         mSurfaceView.getHolder().setFixedSize(1, 1);
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
-        DroidVideoRecorder.OnStartRecording(mSurfaceView.getHolder(), orientationEvent);
+        DroidVideoRecorder.OnStartRecording(mSurfaceView.getHolder(), orientationEvent, DroidPrefsUtils.obtemQualidadeCamera(this));
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.RECORD;
         Vibrar(50);
     }
@@ -196,6 +197,12 @@ public class DroidHeadService extends Service {
         DroidVideoRecorder.OnStopRecording(record);
         ShowStop();
         Vibrar(50);
+    }
+
+    private void GetDefaultStop()
+    {
+        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
+        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.EnumTypeViewCam.FacingBack);
     }
 
     private void ShowStop() {
@@ -207,6 +214,15 @@ public class DroidHeadService extends Service {
         chatHead.setImageResource(R.drawable.closerec);
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.CLOSE;
         Vibrar(50);
+    }
+    private void ShowActivity()
+    {
+        context = getBaseContext();
+        Intent mItent = new Intent(context, DroidConfigurationActivity.class);
+
+        mItent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mItent.putExtra(DroidConstants.CHAMADAPELOSERVICO, true);
+        startActivity(mItent);
     }
 
     private void SetDrawRec(DroidVideoRecorder.EnumStateRecVideo stateRecVideo) {
@@ -223,7 +239,12 @@ public class DroidHeadService extends Service {
             if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
                 ShowClose();
             } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.CLOSE) {
+                ShowActivity();
                 ShowStop();
+            }
+            else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW)
+            {
+               // nada a fazer
             }
         } else {
             if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {

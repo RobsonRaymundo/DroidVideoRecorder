@@ -1,5 +1,6 @@
 package com.droid.videoRecorder;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
@@ -191,7 +192,7 @@ public class DroidVideoRecorder {
     }
 
 
-    public static void OnStartRecording(SurfaceHolder surfaceHolder, int orientation)
+    public static void OnStartRecording(SurfaceHolder surfaceHolder, int orientation, int qualidadeCamera)
     {
         try {
 
@@ -203,13 +204,7 @@ public class DroidVideoRecorder {
             mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             mMediaRecorder.setOutputFile(NameFileRecDateNow());
 
-            if (DroidVideoRecorder.TypeViewCam == EnumTypeViewCam.FacingFront)
-            {
-                mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_LOW));
-            }
-            else {
-                mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
-            }
+            mMediaRecorder.setProfile(CamcorderProfile.get(qualidadeCamera));
 
             mMediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());
             mMediaRecorder.setOrientationHint(GetDisplayOrientationRec(orientation));
@@ -239,7 +234,7 @@ public class DroidVideoRecorder {
     }
 
     public static void OnStopRecording(boolean record) {
-        //Toast.makeText(getBaseContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
+
         try {
             mServiceCamera.reconnect();
         } catch (IOException e) {
