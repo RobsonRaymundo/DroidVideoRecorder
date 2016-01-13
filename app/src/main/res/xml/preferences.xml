@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Tela de Configurações">
+    <PreferenceCategory android:title="@string/txt_tela_Config">
         <CheckBoxPreference
             android:key="chk_exibeAoIniciar"
-            android:summary="Exibe a tela de configurações ao iniciar?"
+            android:summary="@string/chk_exibe_iniciar"
             android:defaultValue="true"
-            android:title="Configurações">
+            android:title="@string/txt_titulo">
         </CheckBoxPreference>
 
         <ListPreference
             android:key="ltp_qualidadeCameraTraseira"
-            android:summary="Qualidade da Câmera Traseira"
-            android:title="Câmera Traseira"
+            android:summary="@string/txt_qualidade_camera_traseira"
+            android:title="@string/txt_camera_traseira"
             android:entries="@array/qualidadeCameraTraseira"
             android:entryValues="@array/valor_qualidadeCameraTraseira"
             android:defaultValue="0">
@@ -19,8 +19,8 @@
 
         <ListPreference
             android:key="ltp_qualidadeCameraFrontal"
-            android:summary="Qualidade da Câmera Frontal"
-            android:title="Câmera Frontal"
+            android:summary="@string/txt_qualidade_camera_frontal"
+            android:title="@string/txt_camera_frontal"
             android:entries="@array/qualidadeCameraFrontal"
             android:entryValues="@array/valor_qualidadeCameraFrontal"
             android:defaultValue="0">
