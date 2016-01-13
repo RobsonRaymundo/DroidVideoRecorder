@@ -2,7 +2,6 @@ package com.droid.videoRecorder;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.CamcorderProfile;
 import android.preference.PreferenceManager;
 import android.util.Log;
 

@@ -1,13 +1,11 @@
 package com.droid.videoRecorder;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.view.SurfaceHolder;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -32,15 +30,15 @@ public class DroidVideoRecorder {
 
     }
 
+    public static EnumStateRecVideo StateRecVideo;
+    public static EnumTypeViewCam TypeViewCam;
+
     private static void TimeSleep(Integer seg) {
         try {
             Thread.sleep(seg);
         } catch (Exception ex) {
         }
     }
-
-    public static EnumStateRecVideo StateRecVideo;
-    public static EnumTypeViewCam TypeViewCam;
 
     private static String CreateGetDirectory()
     {

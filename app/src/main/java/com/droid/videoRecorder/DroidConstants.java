@@ -5,8 +5,5 @@ package com.droid.videoRecorder;
  */
 public class DroidConstants {
     public static final String CHAMADAPELOSERVICO = "chamadaPeloServico";
-    public static final String INICIATELACONFIGURACOES = "iniciaTelaConfiguracoes";
-    public static final String QUALIDADECAMTRASEIRA = "qualidadeCameraTraseira";
-    public static final String QUALIDADECAMFRONTAL= "qualidadeCameraFrontal";
 
 }
