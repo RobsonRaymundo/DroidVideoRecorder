@@ -9,20 +9,20 @@
         </CheckBoxPreference>
 
         <ListPreference
-            android:key="ltp_qualCamTraseira"
+            android:key="ltp_qualidadeCameraTraseira"
             android:summary="Qualidade da Câmera Traseira"
             android:title="Câmera Traseira"
-            android:entries="@array/qualidadeCamera"
-            android:entryValues="@array/valor_qualidadeCamera"
+            android:entries="@array/qualidadeCameraTraseira"
+            android:entryValues="@array/valor_qualidadeCameraTraseira"
             android:defaultValue="0">
         </ListPreference>
 
         <ListPreference
-            android:key="ltp_qualCamFrontal"
+            android:key="ltp_qualidadeCameraFrontal"
             android:summary="Qualidade da Câmera Frontal"
             android:title="Câmera Frontal"
-            android:entries="@array/qualidadeCamera"
-            android:entryValues="@array/valor_qualidadeCamera"
+            android:entries="@array/qualidadeCameraFrontal"
+            android:entryValues="@array/valor_qualidadeCameraFrontal"
             android:defaultValue="0">
         </ListPreference>
 
