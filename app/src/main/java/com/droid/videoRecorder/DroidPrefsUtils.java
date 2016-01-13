@@ -32,9 +32,9 @@ public class DroidPrefsUtils {
         {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             if (DroidVideoRecorder.TypeViewCam == DroidVideoRecorder.EnumTypeViewCam.FacingFront) {
-                qualid = Integer.parseInt(sp.getString("ltp_qualCamFrontal", "0"));
+                qualid = Integer.parseInt(sp.getString("ltp_qualidadeCameraFrontal", "0"));
             }
-            else qualid = Integer.parseInt(sp.getString("ltp_qualCamTraseira", "0"));
+            else qualid = Integer.parseInt(sp.getString("ltp_qualidadeCameraTraseira", "0"));
 
         }
         catch (Exception ex)
