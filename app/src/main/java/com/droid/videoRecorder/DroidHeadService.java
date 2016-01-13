@@ -201,8 +201,12 @@ public class DroidHeadService extends Service {
 
     private void GetDefaultStop()
     {
+        mSurfaceView.getHolder().setFixedSize(1, 1);
+        chatHead.setImageResource(R.drawable.stoprec);
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.EnumTypeViewCam.FacingBack);
+        DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
+        DroidVideoRecorder.OnStopRecording(false);
     }
 
     private void ShowStop() {
@@ -244,7 +248,7 @@ public class DroidHeadService extends Service {
             }
             else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW)
             {
-               // nada a fazer
+               GetDefaultStop();
             }
         } else {
             if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
