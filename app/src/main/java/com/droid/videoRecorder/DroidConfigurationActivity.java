@@ -56,9 +56,13 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
         if (!ExibeTelaInicial() && !ChamadaPeloServico()) {
-            finish();
+           finish();
         }
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }
