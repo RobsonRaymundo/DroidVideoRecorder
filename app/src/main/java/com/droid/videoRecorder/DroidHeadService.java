@@ -4,17 +4,22 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.hardware.SensorManager;
 import android.os.*;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 public class DroidHeadService extends Service {
     private WindowManager windowManager;
     private WindowManager windowManagerSurface;
     private ImageView chatHead;
+    private TextView txtHead;
     private SurfaceView mSurfaceView;
     private int initialX;
     private int initialY;
@@ -22,6 +27,7 @@ public class DroidHeadService extends Service {
     private float initialTouchY;
     private int orientationEvent;
     private Context context;
+    private AsyncTask asyncTask;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -69,15 +75,18 @@ public class DroidHeadService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         chatHead = new ImageView(this);
         chatHead.setImageResource(R.drawable.stoprec);
+        txtHead = new TextView(this);
+        txtHead.setText("00:00");
+        txtHead.setVisibility(View.INVISIBLE);
+
         params.gravity = Gravity.CENTER;
         windowManager.addView(chatHead, params);
+        windowManager.addView(txtHead, params);
 
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.EnumTypeViewCam.FacingBack);
 
-        chatHead.setOnTouchListener(new View.OnTouchListener() {
-
-
+        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(DroidHeadService.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
@@ -114,6 +123,7 @@ public class DroidHeadService extends Service {
                         if (myOrientationEventListener.canDetectOrientation()) {
                             myOrientationEventListener.enable();
                         }
+                        Log.d("TEST", "ACTION_DOWN");
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         Integer totalMoveX = (int) (event.getRawX() - initialTouchX);
@@ -121,13 +131,18 @@ public class DroidHeadService extends Service {
                         Integer totalMoveY = (int) (event.getRawY() - initialTouchY);
                         params.y = initialY + totalMoveY;
                         windowManager.updateViewLayout(chatHead, params);
+                        windowManager.updateViewLayout(txtHead, params);
                         //hasMoveTouch = abs(totalMoveX) > 35 || abs(totalMoveY) > 35;
+                        Log.d("TEST", "ACTION_MOVE");
                         return true;
                 }
 
                 return true;
             }
-        });
+        };
+
+        txtHead.setOnTouchListener(onTouchListener);
+        chatHead.setOnTouchListener(onTouchListener);
 
         myOrientationEventListener
                 = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
@@ -152,6 +167,7 @@ public class DroidHeadService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if (chatHead != null) windowManager.removeView(chatHead);
+        if (txtHead != null) windowManager.removeView(txtHead);
         if (mSurfaceView != null) windowManagerSurface.removeView(mSurfaceView);
         Vibrar(100);
     }
@@ -165,16 +181,14 @@ public class DroidHeadService extends Service {
         Vibrar(100);
     }
 
+
     private void ChangeTypeViewCam() {
         chatHead.setImageResource(R.drawable.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
 
-        if (DroidVideoRecorder.TypeViewCam == DroidVideoRecorder.EnumTypeViewCam.FacingBack)
-        {
+        if (DroidVideoRecorder.TypeViewCam == DroidVideoRecorder.EnumTypeViewCam.FacingBack) {
             DroidVideoRecorder.TypeViewCam = DroidVideoRecorder.EnumTypeViewCam.FacingFront;
-        }
-        else
-        {
+        } else {
             DroidVideoRecorder.TypeViewCam = DroidVideoRecorder.EnumTypeViewCam.FacingBack;
         }
 
@@ -191,16 +205,21 @@ public class DroidHeadService extends Service {
         DroidVideoRecorder.OnStartRecording(mSurfaceView.getHolder(), orientationEvent, DroidPrefsUtils.obtemQualidadeCamera(this));
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.RECORD;
         Vibrar(50);
+        if (DroidPrefsUtils.exibeTempoGravacao(this)) {
+            asyncTask = new Sincronizar().execute();
+        }
     }
 
     private void ShowStopRecord(boolean record) {
         DroidVideoRecorder.OnStopRecording(record);
+        if (record && asyncTask != null) {
+            asyncTask.cancel(true);
+        }
         ShowStop();
         Vibrar(50);
     }
 
-    private void GetDefaultStop()
-    {
+    private void GetDefaultStop() {
         mSurfaceView.getHolder().setFixedSize(1, 1);
         chatHead.setImageResource(R.drawable.stoprec);
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
@@ -219,8 +238,8 @@ public class DroidHeadService extends Service {
         DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.CLOSE;
         Vibrar(50);
     }
-    private void ShowActivity()
-    {
+
+    private void ShowActivity() {
         context = getBaseContext();
         Intent mItent = new Intent(context, DroidConfigurationActivity.class);
 
@@ -234,8 +253,7 @@ public class DroidHeadService extends Service {
         if (stateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
             if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
                 ShowView();
-            }
-            else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
                 ShowStopRecord(false);
                 ChangeTypeViewCam();
             }
@@ -245,10 +263,8 @@ public class DroidHeadService extends Service {
             } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.CLOSE) {
                 ShowActivity();
                 ShowStop();
-            }
-            else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW)
-            {
-               GetDefaultStop();
+            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
+                GetDefaultStop();
             }
         } else {
             if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
@@ -263,15 +279,62 @@ public class DroidHeadService extends Service {
             }
         }
     }
-    private void Vibrar(int valor)
-    {
+
+    private void Vibrar(int valor) {
         try {
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             v.vibrate(valor);
         } catch (Exception ex) {
         }
     }
+
+    private class Sincronizar extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                int minutes = 0;
+                int second = 0;
+                while (second <= 60) {
+                    Thread.sleep(1000);
+                    second++;
+                    if (second == 60)
+                    {
+                        minutes++;
+                        second = 0;
+                    }
+                    publishProgress(second, minutes);
+                }
+            } catch (Exception e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            txtHead.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            txtHead.setText("00:00");
+            txtHead.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            DecimalFormat df = new DecimalFormat("00");
+            txtHead.setText(df.format(values[1]) + ":" + df.format(values[0]));
+        }
+    }
+
 }
+
+
 
 
 

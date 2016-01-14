@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/txt_tela_Config">
-        <CheckBoxPreference
-            android:key="chk_exibeAoIniciar"
-            android:summary="@string/chk_exibe_iniciar"
+        <SwitchPreference
+            android:key="spf_exibeAoIniciar"
+            android:summary="@string/spf_exibe_iniciar"
             android:defaultValue="true"
             android:title="@string/txt_titulo">
-        </CheckBoxPreference>
+        </SwitchPreference>
+
+        <SwitchPreference
+            android:key="spf_exibeTempoGravacao"
+            android:summary="@string/spf_exibe_tempo_gravacao"
+            android:title="@string/spf_titulo"
+            android:defaultValue="true">
+        </SwitchPreference>
 
         <ListPreference
             android:key="ltp_qualidadeCameraTraseira"

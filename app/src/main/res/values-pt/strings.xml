@@ -3,9 +3,11 @@
     <string name="txt_titulo">Configurações</string>
     <string name="app_name">Droid Video Recorder</string>
     <string name="txt_tela_Config">TELA DE CONFIGURAÇÕES</string>
-    <string name="chk_exibe_iniciar">Exibe a tela de configurações ao iniciar?</string>
+    <string name="spf_exibe_iniciar">Exibe a tela de configurações ao iniciar?</string>
     <string name="txt_qualidade_camera_traseira">Qualidade da câmera traseira</string>
     <string name="txt_qualidade_camera_frontal">Qualidade da câmera frontal</string>
     <string name="txt_camera_traseira">Câmera traseira</string>
     <string name="txt_camera_frontal">Câmera frontal</string>
+    <string name="spf_exibe_tempo_gravacao">Exibe tempo de gravação?</string>
+    <string name="spf_titulo">Tempo</string>
 </resources>

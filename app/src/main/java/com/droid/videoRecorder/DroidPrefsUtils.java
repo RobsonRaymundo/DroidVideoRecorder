@@ -11,19 +11,36 @@ import android.util.Log;
 public class DroidPrefsUtils {
     public static boolean exibeTelaInicial(final Context context)
     {
-        boolean chk = false;
+        boolean spf = false;
         try
         {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            chk = sp.getBoolean("chk_exibeAoIniciar", true);
+            spf = sp.getBoolean("spf_exibeAoIniciar", true);
         }
         catch (Exception ex)
         {
             Log.d("DroidVideo", ex.getMessage());
         }
-        return chk;
+        return spf;
 
     }
+
+    public static boolean exibeTempoGravacao(final Context context)
+    {
+        boolean spf = false;
+        try
+        {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getBoolean("spf_exibeTempoGravacao", true);
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidVideo", ex.getMessage());
+        }
+        return spf;
+
+    }
+
     public static int  obtemQualidadeCamera(final Context context)
     {
         int qualid = 0; // QUALITY_LOW
