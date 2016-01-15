@@ -17,7 +17,6 @@ import java.text.DecimalFormat;
 
 public class DroidHeadService extends Service {
     private WindowManager windowManager;
-    private WindowManager windowManagerSurface;
     private ImageView chatHead;
     private TextView txtHead;
     private SurfaceView mSurfaceView;
@@ -45,13 +44,6 @@ public class DroidHeadService extends Service {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
 
-    WindowManager.LayoutParams paramsSurface = new WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_PHONE,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT);
-
     @Override
     public IBinder onBind(Intent intent) {
         // Not used
@@ -66,13 +58,12 @@ public class DroidHeadService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        windowManagerSurface = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
         mSurfaceView = new SurfaceView(this);
-        mSurfaceView.setLayoutParams(paramsSurface);
-        windowManagerSurface.addView(mSurfaceView, paramsSurface);
+        mSurfaceView.setLayoutParams(params);
         mSurfaceView.getHolder().setFixedSize(1, 1);
 
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         chatHead = new ImageView(this);
         chatHead.setImageResource(R.drawable.stoprec);
         txtHead = new TextView(this);
@@ -80,6 +71,7 @@ public class DroidHeadService extends Service {
         txtHead.setVisibility(View.INVISIBLE);
 
         params.gravity = Gravity.CENTER;
+        windowManager.addView(mSurfaceView, params);
         windowManager.addView(chatHead, params);
         windowManager.addView(txtHead, params);
 
@@ -90,21 +82,18 @@ public class DroidHeadService extends Service {
             private GestureDetector gestureDetector = new GestureDetector(DroidHeadService.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
-                    Log.d("TEST", "onDoubleTap");
                     SetDrawRec(DroidVideoRecorder.EnumStateRecVideo.CLOSE);
                     return super.onDoubleTap(e);
                 }
 
                 @Override
                 public void onLongPress(MotionEvent e) {
-                    Log.d("TEST", "onLongPress");
                     SetDrawRec(DroidVideoRecorder.EnumStateRecVideo.VIEW);
                     super.onLongPress(e);
                 }
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    Log.d("TEST", "onSingleTapConfirmed");
                     SetDrawRec(DroidVideoRecorder.EnumStateRecVideo.RECORD);
                     return super.onSingleTapConfirmed(e);
                 }
@@ -123,7 +112,6 @@ public class DroidHeadService extends Service {
                         if (myOrientationEventListener.canDetectOrientation()) {
                             myOrientationEventListener.enable();
                         }
-                        Log.d("TEST", "ACTION_DOWN");
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         Integer totalMoveX = (int) (event.getRawX() - initialTouchX);
@@ -132,8 +120,6 @@ public class DroidHeadService extends Service {
                         params.y = initialY + totalMoveY;
                         windowManager.updateViewLayout(chatHead, params);
                         windowManager.updateViewLayout(txtHead, params);
-                        //hasMoveTouch = abs(totalMoveX) > 35 || abs(totalMoveY) > 35;
-                        Log.d("TEST", "ACTION_MOVE");
                         return true;
                 }
 
@@ -168,7 +154,7 @@ public class DroidHeadService extends Service {
         super.onDestroy();
         if (chatHead != null) windowManager.removeView(chatHead);
         if (txtHead != null) windowManager.removeView(txtHead);
-        if (mSurfaceView != null) windowManagerSurface.removeView(mSurfaceView);
+        if (mSurfaceView != null) windowManager.removeView(mSurfaceView);
         Vibrar(100);
     }
 
