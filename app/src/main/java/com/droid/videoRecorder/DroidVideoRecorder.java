@@ -20,6 +20,7 @@ public class DroidVideoRecorder {
 
     public static DroidConstants.EnumStateRecVideo StateRecVideo;
     public static DroidConstants.EnumTypeViewCam TypeViewCam;
+    public static int LocalGravacaoVideo = 0;
 
     private static void TimeSleep(Integer seg) {
         try {
@@ -28,35 +29,67 @@ public class DroidVideoRecorder {
         }
     }
 
-    private static String CreateGetDirectory()
-    {
-        String newFolder = "/DroidVideoRecorder";
-
-        String extStorageDirectory = Environment
-                .getExternalStorageDirectory().toString();
-
-        File myNewFolder = new File(extStorageDirectory + newFolder);
-
-        if (!myNewFolder.exists()) {
-            myNewFolder.mkdir();
-            TimeSleep(1000);
-        }
-
-        if (myNewFolder.exists())
-        {
-            return extStorageDirectory + newFolder;
-        }
-        else
-        {
-            return extStorageDirectory;
-        }
+    public static boolean isExternalStorageMediaMounted() {
+        return (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()));
     }
+
+    public static String GetPathStorage() {
+        String strSDCardPath = "";
+        String strDirectory = "";
+        String strPaste = "/DroidVideoRecorder/";
+        try {
+
+            if (LocalGravacaoVideo == 1) { // Cartao SD
+                if (isExternalStorageMediaMounted()) {
+                    strSDCardPath = System.getenv("SECONDARY_STORAGE");
+                    if ((null == strSDCardPath) || (strSDCardPath.length() == 0)) {
+                        strSDCardPath = System.getenv("EXTERNAL_SDCARD_STORAGE");
+                    }
+                    strDirectory = CreateGetDirectory(strSDCardPath + strPaste);
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            if (strSDCardPath == "" || strDirectory == "") {
+                strSDCardPath = Environment.getExternalStorageDirectory().toString();
+                strDirectory = CreateGetDirectory(strSDCardPath + strPaste);
+            }
+        }
+        return strDirectory;
+    }
+
+
+    public static String CreateGetDirectory(String pathStorage)
+    {
+        String pathDirectory = "";
+
+        try {
+
+            File myNewFolder = new File(pathStorage);
+
+            if (!myNewFolder.exists()) {
+                myNewFolder.mkdir();
+                TimeSleep(1000);
+            }
+            if (myNewFolder.exists())
+            {
+                pathDirectory = pathStorage;
+            }
+        }
+        catch (Exception e)
+        {
+
+        }
+        return pathDirectory;
+    }
+
+
 
     private static String NameFileRecDateNow()
     {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyyMMdd_hhmmss");
         String dateformat = simpleFormat.format( new Date( System.currentTimeMillis() ));
-        return CreateGetDirectory() + "/DVR_" + dateformat +  ".mp4";
+        return GetPathStorage() + "/DVR_" + dateformat +  ".mp4";
     }
 
     private static int GetDisplayOrientationRec(int orientation)

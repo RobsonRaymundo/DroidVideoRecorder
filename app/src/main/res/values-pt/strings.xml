@@ -10,4 +10,6 @@
     <string name="txt_camera_frontal">Qualidade da câmera frontal</string>
     <string name="spf_exibe_tempo_gravacao">Exibe tempo de gravação?</string>
     <string name="spf_titulo">Tempo</string>
+    <string name="txt_gravacao_videos">Local da gravação dos videos</string>
+    <string name="txt_local_gravacao_videos">Interno</string>
 </resources>

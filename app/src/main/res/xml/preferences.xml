@@ -33,6 +33,17 @@
             android:defaultValue="0">
         </ListPreference>
 
+        <ListPreference
+            android:key="ltp_localGravacaoVideo"
+            android:summary="@string/txt_local_gravacao_videos"
+            android:title="@string/txt_gravacao_videos"
+            android:entries="@array/localArquivosGravados"
+            android:entryValues="@array/valor_localArquivosGravados"
+            android:defaultValue="0">
+        </ListPreference>
+
+
+
 
     </PreferenceCategory>
 

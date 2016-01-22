@@ -10,4 +10,6 @@
     <string name="txt_camera_frontal">Front camera quality</string>
     <string name="spf_exibe_tempo_gravacao">Displays recording rate?</string>
     <string name="spf_titulo">Time</string>
+    <string name="txt_gravacao_videos">Local recording of videos</string>
+    <string name="txt_local_gravacao_videos">Internal</string>
 </resources>

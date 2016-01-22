@@ -63,6 +63,22 @@ public class DroidPrefsUtils {
 
     }
 
+    public static int obtemLocalGravacao(final Context context)
+    {
+        int local = 0; // Interno
+        try
+        {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            local = Integer.parseInt(sp.getString("ltp_localGravacaoVideo", "0"));
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidVideo", ex.getMessage());
+        }
+        return local;
+
+    }
+
     public static String obtemDescricaoPreferencias (final Context context, String valor_selecionado, int nome_lista, int lista_valor ) {
         String nome_selecionado = "";
 

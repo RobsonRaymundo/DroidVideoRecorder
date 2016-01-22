@@ -16,6 +16,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     private Context context;
     private ListPreference ltp_qualidadeCameraFrontal;
     private ListPreference ltp_qualidadeCameraTraseira;
+    private ListPreference ltp_localGravacaoVideo;
 
     private boolean ExibeTelaInicial() {
         boolean exibeTelaInicial = true;
@@ -66,7 +67,18 @@ public class DroidConfigurationActivity extends PreferenceActivity {
             ltp_qualidadeCameraTraseira.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    preference.setSummary(DroidPrefsUtils.obtemDescricaoPreferencias(context, newValue.toString(), R.array.qualidadeCameraTraseira, R.array.valor_qualidadeCameraTraseira ));
+                    preference.setSummary(DroidPrefsUtils.obtemDescricaoPreferencias(context, newValue.toString(), R.array.qualidadeCameraTraseira, R.array.valor_qualidadeCameraTraseira));
+                    return true;
+                }
+            });
+
+            ltp_localGravacaoVideo = (ListPreference) findPreference("ltp_localGravacaoVideo");
+            ltp_localGravacaoVideo.setSummary(DroidPrefsUtils.obtemDescricaoPreferencias(context, String.valueOf(DroidPrefsUtils.obtemLocalGravacao(context)), R.array.localArquivosGravados, R.array.valor_localArquivosGravados));
+            ltp_localGravacaoVideo.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    preference.setSummary(DroidPrefsUtils.obtemDescricaoPreferencias(context, newValue.toString(), R.array.localArquivosGravados, R.array.valor_localArquivosGravados));
+                    DroidVideoRecorder.LocalGravacaoVideo = Integer.parseInt(newValue.toString());
                     return true;
                 }
             });

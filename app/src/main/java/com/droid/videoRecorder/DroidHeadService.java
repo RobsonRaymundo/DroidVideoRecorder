@@ -76,6 +76,9 @@ public class DroidHeadService extends Service {
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
 
+        context = getBaseContext();
+        DroidVideoRecorder.LocalGravacaoVideo = DroidPrefsUtils.obtemLocalGravacao(context);
+
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(DroidHeadService.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -224,7 +227,7 @@ public class DroidHeadService extends Service {
     }
 
     private void ShowActivity() {
-        context = getBaseContext();
+        //context = getBaseContext();
         Intent mItent = new Intent(context, DroidConfigurationActivity.class);
 
         mItent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
