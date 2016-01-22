@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.provider.SyncStateContract;
 
 import java.util.prefs.Preferences;
 
@@ -38,18 +39,49 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         return chamadaPeloServico;
     }
 
+    private boolean ChamadaConfigPeloDNP()
+    {
+        boolean chamadaPeloDNF = false;
+        try {
+
+            chamadaPeloDNF = getIntent().getStringExtra(DroidConstants.CHAMADAPELODNP).equals("DVR=CONFIG");
+
+        } catch (Exception ex) {
+
+        }
+        return chamadaPeloDNF;
+
+    }
+
+    private String ChamadaBroadCastPeloDNP()
+    {
+        String chamadaPeloDNF = "";
+        try {
+
+            chamadaPeloDNF = getIntent().getStringExtra(DroidConstants.CHAMADAPELODNP);
+
+        } catch (Exception ex) {
+
+        }
+        return chamadaPeloDNF;
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
         boolean exibeTelaInicial = ExibeTelaInicial();
         boolean chamadaPeloServico = ChamadaPeloServico();
-        if (exibeTelaInicial || chamadaPeloServico) {
+        boolean chamadaConfigPeloDNP = ChamadaConfigPeloDNP();
+
+        if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPeloDNP ) {
             setTheme(R.style.DefaultTheme);
         } else {
             setTheme(R.style.TranslucentTheme);
         }
         super.onCreate(savedInstanceState);
-        if (exibeTelaInicial || chamadaPeloServico) {
+
+        if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPeloDNP) {
             addPreferencesFromResource(R.xml.preferences);
 
             ltp_qualidadeCameraFrontal = (ListPreference) findPreference("ltp_qualidadeCameraFrontal");
@@ -87,6 +119,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
 
         if (!chamadaPeloServico) {
             Intent intentService = new Intent(context, DroidHeadService.class);
+            intentService.putExtra(DroidConstants.CHAMADAPELODNP, ChamadaBroadCastPeloDNP());
             startService(intentService);
         }
     }
@@ -96,7 +129,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!ExibeTelaInicial() && !ChamadaPeloServico()) {
+        if (!ExibeTelaInicial() && !ChamadaPeloServico() && !ChamadaConfigPeloDNP()) {
            finish();
         }
     }

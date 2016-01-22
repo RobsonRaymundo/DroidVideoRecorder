@@ -17,6 +17,7 @@
     <uses-feature android:name="android.hardware.microphone"/>
 
 
+
     <application android:hardwareAccelerated="true" android:label="@string/app_name" android:icon="@drawable/ic_launcher">
 
         <activity android:name=".DroidConfigurationActivity"
@@ -31,6 +32,13 @@
 
         <service android:name = ".DroidHeadService">
         </service>
+        <receiver android:name=".DroidReceiver">
+            <intent-filter>
+                <action android:name="DVRREC"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+
 
 
     </application>

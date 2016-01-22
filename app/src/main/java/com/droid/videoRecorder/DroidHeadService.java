@@ -1,6 +1,9 @@
 package com.droid.videoRecorder;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,8 +13,10 @@ import android.os.*;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 public class DroidHeadService extends Service {
     private WindowManager windowManager;
@@ -25,6 +30,7 @@ public class DroidHeadService extends Service {
     private int orientationEvent;
     private Context context;
     private AsyncTask asyncTask;
+    private String chamadaPeloDNP;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -51,6 +57,46 @@ public class DroidHeadService extends Service {
     private void StopService() {
         this.stopSelf();
     }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+        chamadaPeloDNP = intent.getStringExtra(DroidConstants.CHAMADAPELODNP);
+
+        if (chamadaPeloDNP != null) {
+            switch (chamadaPeloDNP) {
+                case "DVR=STOP":
+                {
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                    break;
+                }
+                case "DVR=VIEW":
+                {
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
+                    break;
+                }
+                case "DVR=REC":
+                {
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                    break;
+                }
+                case "DVR=CLOSE":
+                {
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
+                    break;
+                }
+                case "DVR=QUIT":
+                {
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                    break;
+                }
+
+            }
+        }
+
+    }
+
+
 
     @Override
     public void onCreate() {
@@ -98,7 +144,6 @@ public class DroidHeadService extends Service {
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
                     return super.onSingleTapConfirmed(e);
                 }
-
             });
 
             @Override
@@ -167,7 +212,6 @@ public class DroidHeadService extends Service {
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.VIEW;
         Vibrar(100);
     }
-
 
     private void ChangeTypeViewCam() {
         chatHead.setImageResource(R.drawable.viewrec);
