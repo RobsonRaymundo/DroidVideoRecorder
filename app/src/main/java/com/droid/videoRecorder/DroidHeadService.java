@@ -4,11 +4,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.hardware.SensorManager;
 import android.os.*;
-import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,26 +73,26 @@ public class DroidHeadService extends Service {
         windowManager.addView(chatHead, params);
         windowManager.addView(txtHead, params);
 
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
-        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.EnumTypeViewCam.FacingBack);
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
+        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
 
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(DroidHeadService.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
-                    SetDrawRec(DroidVideoRecorder.EnumStateRecVideo.CLOSE);
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
                     return super.onDoubleTap(e);
                 }
 
                 @Override
                 public void onLongPress(MotionEvent e) {
-                    SetDrawRec(DroidVideoRecorder.EnumStateRecVideo.VIEW);
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
                     super.onLongPress(e);
                 }
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    SetDrawRec(DroidVideoRecorder.EnumStateRecVideo.RECORD);
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
                     return super.onSingleTapConfirmed(e);
                 }
 
@@ -144,7 +142,7 @@ public class DroidHeadService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //call widget update methods/services/broadcasts
-        if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
+        if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
             DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
         }
     }
@@ -161,9 +159,9 @@ public class DroidHeadService extends Service {
     private void ShowView() {
         chatHead.setImageResource(R.drawable.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
-        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.EnumTypeViewCam.FacingBack);
+        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.VIEW;
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.VIEW;
         Vibrar(100);
     }
 
@@ -172,15 +170,15 @@ public class DroidHeadService extends Service {
         chatHead.setImageResource(R.drawable.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
 
-        if (DroidVideoRecorder.TypeViewCam == DroidVideoRecorder.EnumTypeViewCam.FacingBack) {
-            DroidVideoRecorder.TypeViewCam = DroidVideoRecorder.EnumTypeViewCam.FacingFront;
+        if (DroidVideoRecorder.TypeViewCam == DroidConstants.EnumTypeViewCam.FacingBack) {
+            DroidVideoRecorder.TypeViewCam = DroidConstants.EnumTypeViewCam.FacingFront;
         } else {
-            DroidVideoRecorder.TypeViewCam = DroidVideoRecorder.EnumTypeViewCam.FacingBack;
+            DroidVideoRecorder.TypeViewCam = DroidConstants.EnumTypeViewCam.FacingBack;
         }
 
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.VIEW;
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.VIEW;
         Vibrar(100);
     }
 
@@ -188,8 +186,8 @@ public class DroidHeadService extends Service {
         chatHead.setImageResource(R.drawable.rec);
         mSurfaceView.getHolder().setFixedSize(1, 1);
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
-        DroidVideoRecorder.OnStartRecording(mSurfaceView.getHolder(), orientationEvent, DroidPrefsUtils.obtemQualidadeCamera(this));
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.RECORD;
+        DroidVideoRecorder.OnStartRecording(mSurfaceView.getHolder(), orientationEvent, DroidPrefsUtils.obtemQualidadeCamera(this, DroidConstants.EnumTypeViewCam.FacingBack));
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.RECORD;
         Vibrar(50);
         if (DroidPrefsUtils.exibeTempoGravacao(this)) {
             asyncTask = new Sincronizar().execute();
@@ -208,20 +206,20 @@ public class DroidHeadService extends Service {
     private void GetDefaultStop() {
         mSurfaceView.getHolder().setFixedSize(1, 1);
         chatHead.setImageResource(R.drawable.stoprec);
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
-        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.EnumTypeViewCam.FacingBack);
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
+        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
         DroidVideoRecorder.OnStopRecording(false);
     }
 
     private void ShowStop() {
         chatHead.setImageResource(R.drawable.stoprec);
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.STOP;
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
     }
 
     private void ShowClose() {
         chatHead.setImageResource(R.drawable.closerec);
-        DroidVideoRecorder.StateRecVideo = DroidVideoRecorder.EnumStateRecVideo.CLOSE;
+        DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.CLOSE;
         Vibrar(50);
     }
 
@@ -234,32 +232,32 @@ public class DroidHeadService extends Service {
         startActivity(mItent);
     }
 
-    private void SetDrawRec(DroidVideoRecorder.EnumStateRecVideo stateRecVideo) {
+    private void SetDrawRec(DroidConstants.EnumStateRecVideo stateRecVideo) {
 
-        if (stateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
-            if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
+        if (stateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
+            if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.STOP) {
                 ShowView();
-            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
                 ShowStopRecord(false);
                 ChangeTypeViewCam();
             }
-        } else if (stateRecVideo == DroidVideoRecorder.EnumStateRecVideo.CLOSE) {
-            if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
+        } else if (stateRecVideo == DroidConstants.EnumStateRecVideo.CLOSE) {
+            if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.STOP) {
                 ShowClose();
-            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.CLOSE) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.CLOSE) {
                 ShowActivity();
                 ShowStop();
-            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
                 GetDefaultStop();
             }
         } else {
-            if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.STOP) {
+            if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.STOP) {
                 ShowRec();
-            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.RECORD) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.RECORD) {
                 ShowStopRecord(true);
-            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.VIEW) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
                 ShowRec();
-            } else if (DroidVideoRecorder.StateRecVideo == DroidVideoRecorder.EnumStateRecVideo.CLOSE) {
+            } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.CLOSE) {
                 TimeSleep(300);
                 StopService();
             }

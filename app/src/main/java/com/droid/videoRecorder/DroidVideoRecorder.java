@@ -13,25 +13,13 @@ import java.util.Date;
 import java.util.List;
 import android.util.Log;
 
+
 public class DroidVideoRecorder {
     private static Camera mServiceCamera;
     private static MediaRecorder mMediaRecorder;
-    public enum EnumStateRecVideo {
-        CLOSE,
-        STOP,
-        VIEW,
-        RECORD
-    }
 
-    public static enum EnumTypeViewCam
-    {
-        FacingBack,
-        FacingFront
-
-    }
-
-    public static EnumStateRecVideo StateRecVideo;
-    public static EnumTypeViewCam TypeViewCam;
+    public static DroidConstants.EnumStateRecVideo StateRecVideo;
+    public static DroidConstants.EnumTypeViewCam TypeViewCam;
 
     private static void TimeSleep(Integer seg) {
         try {
@@ -77,7 +65,7 @@ public class DroidVideoRecorder {
 
         if (orientation > 315 || orientation <= 45)
         {
-            if (DroidVideoRecorder.TypeViewCam == EnumTypeViewCam.FacingFront)
+            if (TypeViewCam == DroidConstants.EnumTypeViewCam.FacingFront)
             {
                 displayOrient = 270;
             }
@@ -126,18 +114,18 @@ public class DroidVideoRecorder {
         return displayOrient;
     }
 
-    public static void OnInitRec (Configuration orient, int orientation, EnumTypeViewCam typeViewCam)
+    public static void OnInitRec (Configuration orient, int orientation, DroidConstants.EnumTypeViewCam typeViewCam)
     {
         try {
             int currentCameraId;
-            if (typeViewCam == EnumTypeViewCam.FacingFront)
+            if (typeViewCam == DroidConstants.EnumTypeViewCam.FacingFront)
             {
                 currentCameraId=Camera.CameraInfo.CAMERA_FACING_FRONT;
-                DroidVideoRecorder.TypeViewCam = EnumTypeViewCam.FacingFront;
+                TypeViewCam = DroidConstants.EnumTypeViewCam.FacingFront;
             }
             else {
                 currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-                DroidVideoRecorder.TypeViewCam = EnumTypeViewCam.FacingBack;
+                TypeViewCam = DroidConstants.EnumTypeViewCam.FacingBack;
             }
 
             if(mServiceCamera == null) {

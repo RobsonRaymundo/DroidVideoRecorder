@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.ResourceBundle;
+
 /**
  * Created by Robson on 12/01/2016.
  */
@@ -41,13 +43,13 @@ public class DroidPrefsUtils {
 
     }
 
-    public static int  obtemQualidadeCamera(final Context context)
+    public static int obtemQualidadeCamera(final Context context,  DroidConstants.EnumTypeViewCam typeViewCam)
     {
         int qualid = 0; // QUALITY_LOW
         try
         {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            if (DroidVideoRecorder.TypeViewCam == DroidVideoRecorder.EnumTypeViewCam.FacingFront) {
+            if ( typeViewCam == DroidConstants.EnumTypeViewCam.FacingFront) {
                 qualid = Integer.parseInt(sp.getString("ltp_qualidadeCameraFrontal", "0"));
             }
             else qualid = Integer.parseInt(sp.getString("ltp_qualidadeCameraTraseira", "0"));
@@ -61,5 +63,19 @@ public class DroidPrefsUtils {
 
     }
 
+    public static String obtemDescricaoPreferencias (final Context context, String valor_selecionado, int nome_lista, int lista_valor ) {
+        String nome_selecionado = "";
 
+        String[] array_lista = context.getResources().getStringArray(nome_lista);
+        String[] array_lista_valores = context.getResources().getStringArray(lista_valor);
+
+        for (int i = 0; i < array_lista_valores.length ; i++) {
+            if (array_lista_valores[i].equals(valor_selecionado))
+            {
+                nome_selecionado = array_lista[i].toString();
+                break;
+            }
+        }
+        return nome_selecionado;
+    }
 }
