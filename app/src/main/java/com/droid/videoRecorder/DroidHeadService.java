@@ -58,13 +58,19 @@ public class DroidHeadService extends Service {
         this.stopSelf();
     }
 
-    @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
+
+    private void ConfigChamadaPeloDNP(Intent intent)
+    {
         chamadaPeloDNP = intent.getStringExtra(DroidConstants.CHAMADAPELODNP);
 
         if (chamadaPeloDNP != null) {
             switch (chamadaPeloDNP) {
+                case "DVR=INVISIBLE":
+                {
+                    chatHead.setVisibility(View.INVISIBLE);
+                    txtHead.setVisibility(View.INVISIBLE);
+                    break;
+                }
                 case "DVR=STOP":
                 {
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
@@ -94,6 +100,12 @@ public class DroidHeadService extends Service {
             }
         }
 
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+        ConfigChamadaPeloDNP(intent);
     }
 
 
@@ -344,7 +356,9 @@ public class DroidHeadService extends Service {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            txtHead.setVisibility(View.VISIBLE);
+            if (chatHead.getVisibility() == View.VISIBLE) {
+                txtHead.setVisibility(View.VISIBLE);
+            }
 
         }
 
