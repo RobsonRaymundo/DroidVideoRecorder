@@ -511,12 +511,17 @@ public class DroidHeadService extends Service {
             }
 
             if (currentCloseSensorProximity && closeSensorProximity && openSensorProximity) {
-                // Inicia o Listener do reconhecimento de voz
 
-                stt.startListening(mIntentRecognizer);
-                currentCloseSensorProximity = false;
-                closeSensorProximity = false;
-                openSensorProximity = false;
+                if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.RECORD) {
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                }
+                else {
+                    // Inicia o Listener do reconhecimento de voz
+                    stt.startListening(mIntentRecognizer);
+                    currentCloseSensorProximity = false;
+                    closeSensorProximity = false;
+                    openSensorProximity = false;
+                }
             }
         }
 
