@@ -40,6 +40,7 @@ public class DroidHeadService extends Service {
     private boolean checkSensorProx;
     private SensorEventListener sensorEventListener;
     private SpeechRecognizer stt;
+    private Intent mIntentRecognizer;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -171,6 +172,7 @@ public class DroidHeadService extends Service {
         EnabledSensorPriximity();
 
         stt = SpeechRecognizer.createSpeechRecognizer(context);
+        mIntentRecognizer = getRecognizerIntent();
         stt.setRecognitionListener(new BaseRecognitionListener() {
             public void onResults(Bundle results) {
                 // Recupera as possíveis palavras que foram pronunciadas
@@ -197,6 +199,10 @@ public class DroidHeadService extends Service {
                 }
             }
 
+            @Override
+            public void onError(int error) {
+                super.onError(error);
+            }
         });
 
     }
@@ -506,8 +512,11 @@ public class DroidHeadService extends Service {
 
             if (currentCloseSensorProximity && closeSensorProximity && openSensorProximity) {
                 // Inicia o Listener do reconhecimento de voz
-                Intent mIntent = getRecognizerIntent();
-                stt.startListening(mIntent);
+
+                stt.startListening(mIntentRecognizer);
+                currentCloseSensorProximity = false;
+                closeSensorProximity = false;
+                openSensorProximity = false;
             }
         }
 
