@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Droid Video Recorder aaa</string>
+    <string name="app_name">Droid Video Recorder</string>
     <string name="txt_titulo">Settings</string>
     <string name="txt_tela_Config">SETTINGS SCREEN</string>
     <string name="spf_exibe_iniciar">Displays the settings screen to start?</string>
