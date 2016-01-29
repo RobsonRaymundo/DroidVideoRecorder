@@ -1,22 +1,23 @@
 package com.droid.videoRecorder;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.*;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.text.DecimalFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
+
 
 public class DroidHeadService extends Service {
     private WindowManager windowManager;
@@ -31,6 +32,14 @@ public class DroidHeadService extends Service {
     private Context context;
     private AsyncTask asyncTask;
     private String chamadaPeloDNP;
+    private SensorManager sensorManager;
+    public static boolean closeSensorProximity;
+    public static boolean openSensorProximity;
+    public static boolean currentCloseSensorProximity;
+    private boolean checkSensorGesture;
+    private boolean checkSensorProx;
+    private SensorEventListener sensorEventListener;
+    private SpeechRecognizer stt;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -106,6 +115,8 @@ public class DroidHeadService extends Service {
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         ConfigChamadaPeloDNP(intent);
+     //   TimeSleep(2000);
+     //   SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
     }
 
 
@@ -113,6 +124,7 @@ public class DroidHeadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -137,65 +149,113 @@ public class DroidHeadService extends Service {
         context = getBaseContext();
         DroidVideoRecorder.LocalGravacaoVideo = DroidPrefsUtils.obtemLocalGravacao(context);
 
-        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
-            private GestureDetector gestureDetector = new GestureDetector(DroidHeadService.this, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onDoubleTap(MotionEvent e) {
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
-                    return super.onDoubleTap(e);
-                }
+        sensorEventListener = new sensorEventListener();
 
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
-                    super.onLongPress(e);
-                }
-
-                @Override
-                public boolean onSingleTapConfirmed(MotionEvent e) {
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                    return super.onSingleTapConfirmed(e);
-                }
-            });
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        initialX = params.x;
-                        initialY = params.y;
-                        initialTouchX = event.getRawX();
-                        initialTouchY = event.getRawY();
-                        if (myOrientationEventListener.canDetectOrientation()) {
-                            myOrientationEventListener.enable();
-                        }
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        Integer totalMoveX = (int) (event.getRawX() - initialTouchX);
-                        params.x = initialX + totalMoveX;
-                        Integer totalMoveY = (int) (event.getRawY() - initialTouchY);
-                        params.y = initialY + totalMoveY;
-                        windowManager.updateViewLayout(chatHead, params);
-                        windowManager.updateViewLayout(txtHead, params);
-                        return true;
-                }
-
-                return true;
-            }
-        };
+        View.OnTouchListener onTouchListener = new TouchListener();
 
         txtHead.setOnTouchListener(onTouchListener);
         chatHead.setOnTouchListener(onTouchListener);
 
-        myOrientationEventListener
-                = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+        myOrientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
             @Override
             public void onOrientationChanged(int arg0) {
                 // TODO Auto-generated method stub
                 orientationEvent = arg0;
             }
         };
+
+
+        checkSensorProx = true;
+        checkSensorGesture = true;
+
+        EnabledSensorPriximity();
+
+        stt = SpeechRecognizer.createSpeechRecognizer(context);
+        stt.setRecognitionListener(new BaseRecognitionListener() {
+            public void onResults(Bundle results) {
+                // Recupera as possíveis palavras que foram pronunciadas
+                ArrayList<String> words = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                Log.d("DroidWakeUp", "onResults: " + words);
+                if (words.contains("gravar")) {
+                    Log.d("DroidWakeUp", "Comando: gravar");
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                }
+                else if (words.contains("parar")) {
+                    Log.d("DroidWakeUp", "Comando: parar");
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                }
+                else if (words.contains("fechar")) {
+                    Log.d("DroidWakeUp", "Comando: fechar");
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
+                }
+                else if (words.contains("sair")) {
+                    Log.d("DroidWakeUp", "Comando: sair");
+                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                }
+                else {
+                    Log.d("DroidWakeUp", "Nao entendeu");
+                }
+            }
+
+        });
+
+    }
+
+    protected Intent getRecognizerIntent() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "pt-BR");
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
+        return intent;
+    }
+
+    public void SetSensorProximity(boolean turnOn)
+    {
+        try {
+
+            if (turnOn && sensorManager == null)
+            {
+                sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+                Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+                if(proximitySensor != null )
+                {
+                    sensorManager.registerListener(sensorEventListener, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    TimeSleep(1000);
+                }
+            }
+
+            if (turnOn == false && sensorManager != null)
+            {
+                sensorManager.unregisterListener(sensorEventListener);
+                //  timeSleep(700);
+                sensorManager = null;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            String msg = ex.getMessage();
+
+        }
+    }
+
+    private void EnabledSensorPriximity()
+    {
+        if (checkSensorGesture || checkSensorProx)
+        {
+            SetSensorProximity(true);
+        }
+    }
+
+    private void DisabledSensorPriximity()
+    {
+        if (checkSensorGesture || checkSensorProx)
+        {
+            SetSensorProximity(false);
+        }
     }
 
     @Override
@@ -213,6 +273,7 @@ public class DroidHeadService extends Service {
         if (chatHead != null) windowManager.removeView(chatHead);
         if (txtHead != null) windowManager.removeView(txtHead);
         if (mSurfaceView != null) windowManager.removeView(mSurfaceView);
+        DisabledSensorPriximity();
         Vibrar(100);
     }
 
@@ -347,6 +408,7 @@ public class DroidHeadService extends Service {
                         second = 0;
                     }
                     publishProgress(second, minutes);
+
                 }
             } catch (Exception e) {
             }
@@ -376,6 +438,85 @@ public class DroidHeadService extends Service {
             txtHead.setText(df.format(values[1]) + ":" + df.format(values[0]));
         }
     }
+
+    public class TouchListener implements View.OnTouchListener {
+
+        private GestureDetector gestureDetector = new GestureDetector(DroidHeadService.this, new GestureDetector.SimpleOnGestureListener() {
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
+                return super.onDoubleTap(e);
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
+                super.onLongPress(e);
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                return super.onSingleTapConfirmed(e);
+            }
+        });
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            gestureDetector.onTouchEvent(event);
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    initialX = params.x;
+                    initialY = params.y;
+                    initialTouchX = event.getRawX();
+                    initialTouchY = event.getRawY();
+                    if (myOrientationEventListener.canDetectOrientation()) {
+                        myOrientationEventListener.enable();
+                    }
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    Integer totalMoveX = (int) (event.getRawX() - initialTouchX);
+                    params.x = initialX + totalMoveX;
+                    Integer totalMoveY = (int) (event.getRawY() - initialTouchY);
+                    params.y = initialY + totalMoveY;
+                    windowManager.updateViewLayout(chatHead, params);
+                    windowManager.updateViewLayout(txtHead, params);
+                    return true;
+            }
+
+            return true;
+        }
+
+    }
+
+    public class sensorEventListener  implements SensorEventListener {
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                if(event.values[0] < event.sensor.getMaximumRange()) {
+                    closeSensorProximity = true;
+                    currentCloseSensorProximity = true;
+                } else {
+                    openSensorProximity = true;
+                    currentCloseSensorProximity = false;
+                }
+            }
+
+            if (currentCloseSensorProximity && closeSensorProximity && openSensorProximity) {
+                // Inicia o Listener do reconhecimento de voz
+                Intent mIntent = getRecognizerIntent();
+                stt.startListening(mIntent);
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
+
 
 }
 
