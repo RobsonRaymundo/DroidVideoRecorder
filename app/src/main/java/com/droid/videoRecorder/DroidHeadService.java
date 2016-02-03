@@ -41,6 +41,7 @@ public class DroidHeadService extends Service {
     private SensorEventListener sensorEventListener;
     private SpeechRecognizer stt;
     private Intent mIntentRecognizer;
+    private Intent mIntentService;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -65,7 +66,7 @@ public class DroidHeadService extends Service {
     }
 
     private void StopService() {
-        this.stopSelf();
+        context.stopService(mIntentService);
     }
 
 
@@ -115,6 +116,7 @@ public class DroidHeadService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+        mIntentService = intent;
         ConfigChamadaPeloDNP(intent);
      //   TimeSleep(2000);
      //   SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
@@ -125,17 +127,18 @@ public class DroidHeadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getBaseContext();
 
 
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
-        mSurfaceView = new SurfaceView(this);
+        mSurfaceView = new SurfaceView(context);
         mSurfaceView.setLayoutParams(params);
         mSurfaceView.getHolder().setFixedSize(1, 1);
 
-        chatHead = new ImageView(this);
+        chatHead = new ImageView(context);
         chatHead.setImageResource(R.drawable.stoprec);
-        txtHead = new TextView(this);
+        txtHead = new TextView(context);
         txtHead.setText("00:00");
         txtHead.setVisibility(View.INVISIBLE);
 
@@ -145,9 +148,9 @@ public class DroidHeadService extends Service {
         windowManager.addView(txtHead, params);
 
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
-        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
+        //DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
 
-        context = getBaseContext();
+
         DroidVideoRecorder.LocalGravacaoVideo = DroidPrefsUtils.obtemLocalGravacao(context);
 
         sensorEventListener = new sensorEventListener();
@@ -157,7 +160,7 @@ public class DroidHeadService extends Service {
         txtHead.setOnTouchListener(onTouchListener);
         chatHead.setOnTouchListener(onTouchListener);
 
-        myOrientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+        myOrientationEventListener = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
             @Override
             public void onOrientationChanged(int arg0) {
                 // TODO Auto-generated method stub
@@ -284,12 +287,14 @@ public class DroidHeadService extends Service {
     }
 
     private void ShowView() {
+      //  DisabledSensorPriximity();
         chatHead.setImageResource(R.drawable.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
-        DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
+        DroidVideoRecorder.OnInitRec(context.getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.VIEW;
         Vibrar(100);
+    //    EnabledSensorPriximity();
     }
 
     private void ChangeTypeViewCam() {
@@ -392,7 +397,7 @@ public class DroidHeadService extends Service {
 
     private void Vibrar(int valor) {
         try {
-            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             v.vibrate(valor);
         } catch (Exception ex) {
         }
