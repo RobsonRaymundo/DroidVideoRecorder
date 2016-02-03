@@ -1,4 +1,5 @@
 package com.droid.videoRecorder;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,15 +12,18 @@ import android.hardware.SensorManager;
 import android.os.*;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
-public class DroidHeadService extends Service {
+public class DroidHeadService extends Service implements TextToSpeech.OnInitListener {
     private WindowManager windowManager;
     private ImageView chatHead;
     private TextView txtHead;
@@ -42,6 +46,7 @@ public class DroidHeadService extends Service {
     private SpeechRecognizer stt;
     private Intent mIntentRecognizer;
     private Intent mIntentService;
+    private TextToSpeech tts;
 
     OrientationEventListener myOrientationEventListener;
 
@@ -67,43 +72,44 @@ public class DroidHeadService extends Service {
 
     private void StopService() {
         context.stopService(mIntentService);
+        tts.shutdown();
     }
 
 
-    private void ConfigChamadaPeloDNP(Intent intent)
-    {
+    private void ConfigChamadaPeloDNP(Intent intent) {
         chamadaPeloDNP = intent.getStringExtra(DroidConstants.CHAMADAPELODNP);
 
         if (chamadaPeloDNP != null) {
             switch (chamadaPeloDNP) {
-                case "DVR=INVISIBLE":
-                {
+
+                case "DVR=INVISIBLE": {
                     chatHead.setVisibility(View.INVISIBLE);
                     txtHead.setVisibility(View.INVISIBLE);
                     break;
                 }
-                case "DVR=STOP":
-                {
+                case "DVR=STOP": {
+                    tts.speak("Parando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
                     break;
                 }
-                case "DVR=VIEW":
-                {
+                case "DVR=VIEW": {
+                    tts.speak("Visualizando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
                     break;
                 }
-                case "DVR=REC":
-                {
+                case "DVR=REC": {
+                    tts.speak("Gravando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
                     break;
                 }
-                case "DVR=CLOSE":
-                {
+                case "DVR=CLOSE": {
+                    tts.speak("Fechando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
                     break;
                 }
-                case "DVR=QUIT":
-                {
+                case "DVR=QUIT": {
+                    tts.speak("Saindo do DVR", TextToSpeech.QUEUE_FLUSH, null);
+                    TimeSleep(2000);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
                     break;
                 }
@@ -118,11 +124,10 @@ public class DroidHeadService extends Service {
         super.onStart(intent, startId);
         mIntentService = intent;
         ConfigChamadaPeloDNP(intent);
-     //   TimeSleep(2000);
-     //   SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+
+        //   TimeSleep(2000);
+        //   SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
     }
-
-
 
     @Override
     public void onCreate() {
@@ -146,6 +151,7 @@ public class DroidHeadService extends Service {
         windowManager.addView(mSurfaceView, params);
         windowManager.addView(chatHead, params);
         windowManager.addView(txtHead, params);
+        tts = new TextToSpeech(context, this);
 
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
         //DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
@@ -183,21 +189,23 @@ public class DroidHeadService extends Service {
                 Log.d("DroidWakeUp", "onResults: " + words);
                 if (words.contains("gravar")) {
                     Log.d("DroidWakeUp", "Comando: gravar");
+                    tts.speak("Gravando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                }
-                else if (words.contains("parar")) {
+                } else if (words.contains("parar")) {
                     Log.d("DroidWakeUp", "Comando: parar");
+                    tts.speak("Parando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                }
-                else if (words.contains("fechar")) {
+                } else if (words.contains("fechar")) {
                     Log.d("DroidWakeUp", "Comando: fechar");
+                    tts.speak("Fechando", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
-                }
-                else if (words.contains("sair")) {
+                } else if (words.contains("sair")) {
                     Log.d("DroidWakeUp", "Comando: sair");
+                    tts.speak("Saindo do DVR", TextToSpeech.QUEUE_FLUSH, null);
+                    TimeSleep(2000);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                }
-                else {
+                } else {
+                    tts.speak("Não entendi o que voce disse", TextToSpeech.QUEUE_FLUSH, null);
                     Log.d("DroidWakeUp", "Nao entendeu");
                 }
             }
@@ -220,49 +228,39 @@ public class DroidHeadService extends Service {
         return intent;
     }
 
-    public void SetSensorProximity(boolean turnOn)
-    {
+    public void SetSensorProximity(boolean turnOn) {
         try {
 
-            if (turnOn && sensorManager == null)
-            {
+            if (turnOn && sensorManager == null) {
                 sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
                 Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
-                if(proximitySensor != null )
-                {
+                if (proximitySensor != null) {
                     sensorManager.registerListener(sensorEventListener, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
                     TimeSleep(1000);
                 }
             }
 
-            if (turnOn == false && sensorManager != null)
-            {
+            if (turnOn == false && sensorManager != null) {
                 sensorManager.unregisterListener(sensorEventListener);
                 //  timeSleep(700);
                 sensorManager = null;
             }
 
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             String msg = ex.getMessage();
 
         }
     }
 
-    private void EnabledSensorPriximity()
-    {
-        if (checkSensorGesture || checkSensorProx)
-        {
+    private void EnabledSensorPriximity() {
+        if (checkSensorGesture || checkSensorProx) {
             SetSensorProximity(true);
         }
     }
 
-    private void DisabledSensorPriximity()
-    {
-        if (checkSensorGesture || checkSensorProx)
-        {
+    private void DisabledSensorPriximity() {
+        if (checkSensorGesture || checkSensorProx) {
             SetSensorProximity(false);
         }
     }
@@ -287,14 +285,12 @@ public class DroidHeadService extends Service {
     }
 
     private void ShowView() {
-      //  DisabledSensorPriximity();
         chatHead.setImageResource(R.drawable.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
         DroidVideoRecorder.OnInitRec(context.getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.VIEW;
         Vibrar(100);
-    //    EnabledSensorPriximity();
     }
 
     private void ChangeTypeViewCam() {
@@ -403,6 +399,19 @@ public class DroidHeadService extends Service {
         }
     }
 
+    @Override
+    public void onInit(int status) {
+        tts.setLanguage(Locale.getDefault());
+        if (chamadaPeloDNP != null) {
+            if (chamadaPeloDNP.contains("DVR=INVISIBLE")) {
+                tts.speak("Abrindo DVR em modo invisivel", TextToSpeech.QUEUE_FLUSH, null);
+            } else if (chamadaPeloDNP.contains("DVR=OPEN")) {
+                tts.speak("Abrindo DVR", TextToSpeech.QUEUE_FLUSH, null);
+            }
+        }
+        else tts.speak("Abrindo DVR", TextToSpeech.QUEUE_FLUSH, null);
+    }
+
     private class Sincronizar extends AsyncTask<Void, Integer, Void> {
 
         @Override
@@ -413,8 +422,7 @@ public class DroidHeadService extends Service {
                 while (second <= 60) {
                     Thread.sleep(1000);
                     second++;
-                    if (second == 60)
-                    {
+                    if (second == 60) {
                         minutes++;
                         second = 0;
                     }
@@ -501,12 +509,12 @@ public class DroidHeadService extends Service {
 
     }
 
-    public class sensorEventListener  implements SensorEventListener {
+    public class sensorEventListener implements SensorEventListener {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-                if(event.values[0] < event.sensor.getMaximumRange()) {
+                if (event.values[0] < event.sensor.getMaximumRange()) {
                     closeSensorProximity = true;
                     currentCloseSensorProximity = true;
                 } else {
@@ -518,9 +526,9 @@ public class DroidHeadService extends Service {
             if (currentCloseSensorProximity && closeSensorProximity && openSensorProximity) {
 
                 if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.RECORD) {
+                    tts.speak("Parando a gravação", TextToSpeech.QUEUE_FLUSH, null);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                }
-                else {
+                } else {
                     // Inicia o Listener do reconhecimento de voz
                     stt.startListening(mIntentRecognizer);
                     currentCloseSensorProximity = false;
@@ -534,7 +542,9 @@ public class DroidHeadService extends Service {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         }
-    };
+    }
+
+    ;
 
 
 }
