@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81aab862-f417-482b-8efd-6c0ee55caab1" name="Default" comment="" />
+    <list default="true" id="325784b3-b719-49d8-99c9-6f96f1bf2db4" name="Default" comment="" />
     <ignored path="DroidVideoRecorder.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,11 +29,101 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="DroidNotification.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidNotification.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+              <folding>
+                <element signature="e#700#701#0" expanded="true" />
+                <element signature="e#732#733#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="preferences.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/preferences.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="71" column="36" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
+              <folding>
+                <element signature="e#155#180#0" expanded="true" />
+                <element signature="e#281#308#0" expanded="true" />
+                <element signature="e#375#395#0" expanded="true" />
+                <element signature="e#529#563#0" expanded="true" />
+                <element signature="e#590#610#0" expanded="true" />
+                <element signature="e#787#826#0" expanded="true" />
+                <element signature="e#853#882#0" expanded="true" />
+                <element signature="e#1185#1223#0" expanded="true" />
+                <element signature="e#1250#1278#0" expanded="true" />
+                <element signature="e#1575#1610#0" expanded="true" />
+                <element signature="e#1637#1666#0" expanded="true" />
+                <element signature="e#2242#2271#0" expanded="true" />
+                <element signature="e#2339#2355#0" expanded="true" />
+                <element signature="e#2492#2523#0" expanded="true" />
+                <element signature="e#2591#2616#0" expanded="true" />
+                <element signature="e#2742#2761#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.851851">
+              <caret line="22" column="40" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DroidPrefsUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidPrefsUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="52" column="28" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DroidHeadService.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidHeadService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.5304347">
+              <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3103#3130#0" expanded="true" />
+                <element signature="e#3348#3380#0" expanded="true" />
+                <element signature="e#3596#3624#0" expanded="true" />
+                <element signature="e#3842#3870#0" expanded="true" />
+                <element signature="e#4087#4116#0" expanded="true" />
+                <element signature="e#6885#6911#0" expanded="true" />
+                <element signature="e#7010#7038#0" expanded="true" />
+                <element signature="e#7190#7215#0" expanded="true" />
+                <element signature="e#7313#7340#0" expanded="true" />
+                <element signature="e#7492#7518#0" expanded="true" />
+                <element signature="e#7617#7645#0" expanded="true" />
+                <element signature="e#7796#7820#0" expanded="true" />
+                <element signature="e#7917#7946#0" expanded="true" />
+                <element signature="e#8151#8181#0" expanded="true" />
+                <element signature="e#17041#17080#0" expanded="true" />
+                <element signature="e#17229#17259#0" expanded="true" />
+                <element signature="e#17322#17352#0" expanded="true" />
+                <element signature="e#21476#21511#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/values-pt/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2592592">
-              <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
+            <state vertical-scroll-proportion="-18.25926">
+              <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -38,41 +133,8 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidReceiver.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DroidPrefsUtils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidPrefsUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DroidHeadService.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidHeadService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5443478">
-              <caret line="184" column="72" selection-start-line="184" selection-start-column="72" selection-end-line="184" selection-end-column="72" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2084#2085#0" expanded="true" />
-                <element signature="e#2115#2116#0" expanded="true" />
-                <element signature="e#5464#6721#0" expanded="true" />
-                <element signature="e#6720#6721#0" expanded="true" />
-                <element signature="method#onDestroy#0;class#DroidHeadService#0" expanded="false" />
-                <element signature="method#ShowView#0;class#DroidHeadService#0" expanded="false" />
-                <element signature="method#ChangeTypeViewCam#0;class#DroidHeadService#0" expanded="false" />
-              </folding>
+              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -81,32 +143,8 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="59" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="59" />
-              <folding>
-                <element signature="e#1176#1194#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseRecognitionListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/BaseRecognitionListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+              <caret line="40" column="44" selection-start-line="40" selection-start-column="44" selection-end-line="40" selection-end-column="44" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DroidVideoRecorder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidVideoRecorder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -114,11 +152,9 @@
       <file leaf-file-name="DroidConfigurationActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConfigurationActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="119" column="24" selection-start-line="119" selection-start-column="12" selection-end-line="119" selection-end-column="24" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="-10.275862">
+              <caret line="99" column="31" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -127,7 +163,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConstants.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+              <caret line="23" column="44" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -1234,7 +1270,7 @@
     <option name="modificationStamps">
       <map>
         <entry key="C:/Android/Projetos/DroidNotificationPlus" value="1451338428863" />
-        <entry key="C:\Users\Robson\Dropbox\GitHub\DroidVideoRecorder" value="4343659440000" />
+        <entry key="C:\Users\Robson\Dropbox\GitHub\DroidVideoRecorder" value="4350295907855" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1552,16 +1588,18 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-pt/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidPrefsUtils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidReceiver.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConfigurationActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/BaseRecognitionListener.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidSensorListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConstants.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidVideoRecorder.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values-pt/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/NotificationService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/NotificationsHolder.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidNotification.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConfigurationActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidReceiver.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidPrefsUtils.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidHeadService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/xml/preferences.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
       </list>
     </option>
   </component>
@@ -1723,13 +1761,13 @@
     <property name="android.project.structure.last.selected" value="SDK Location" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="recentsLimit" value="5" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="76df3e63" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_23_x86" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="3a2ee007" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_23_x86" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
+    <key name="CreateClassDialog.RecentsKey">
       <recent name="com.droid.videoRecorder" />
     </key>
   </component>
@@ -1895,10 +1933,10 @@
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="81aab862-f417-482b-8efd-6c0ee55caab1" name="Default" comment="" />
-      <created>1454082366378</created>
+      <changelist id="325784b3-b719-49d8-99c9-6f96f1bf2db4" name="Default" comment="" />
+      <created>1454687472758</created>
       <option name="number" value="Default" />
-      <updated>1454082366378</updated>
+      <updated>1454687472758</updated>
     </task>
     <servers />
   </component>
@@ -1908,12 +1946,13 @@
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32925472" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32959402" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32925472" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39933258" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
@@ -1927,84 +1966,55 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14285715" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24946696" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidHeadService.java</url>
-          <line>262</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidNotification.java</url>
+          <line>90</line>
           <properties />
-          <option name="timeStamp" value="24" />
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidReceiver.java</url>
-          <line>15</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidNotification.java</url>
+          <line>65</line>
           <properties />
-          <option name="timeStamp" value="25" />
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="35" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
-        <watch expression="sensorEventListener" />
-        <watch expression="event.values[0]" />
-        <watch expression="closeSensorProximity" />
-        <watch expression="currentCloseSensorProximity" />
-        <watch expression="openSensorProximity" />
+        <watch expression="msg.contains(DroidConstants.COMANDOINICIADOPOR)" />
+        <watch expression="msg.substring(0,DroidConstants.COMANDOINICIADOPOR.length())" language="JAVA" custom="" />
+        <watch expression="DroidConstants.COMANDOINICIADOPOR.equalsIgnoreCase(msgCMD)" language="JAVA" custom="" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidVideoRecorder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/array.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-pt/arrays.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2592592">
-          <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-pt/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2592592">
-          <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -2012,45 +2022,58 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConstants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <caret line="23" column="44" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/BaseRecognitionListener.java">
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.3321739">
+          <caret line="640" column="15" selection-start-line="640" selection-start-column="15" selection-end-line="640" selection-end-column="15" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConfigurationActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="119" column="24" selection-start-line="119" selection-start-column="12" selection-end-line="119" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="59" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="59" />
-          <folding>
-            <element signature="e#1176#1194#0" expanded="true" />
-          </folding>
+          <caret line="40" column="44" selection-start-line="40" selection-start-column="44" selection-end-line="40" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidConfigurationActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.275862">
+          <caret line="99" column="31" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/speech/tts/TextToSpeech.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3321739">
+          <caret line="1130" column="97" selection-start-line="1130" selection-start-column="21" selection-end-line="1130" selection-end-column="97" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidNotification.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#700#701#0" expanded="true" />
+            <element signature="e#732#733#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2058,36 +2081,76 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidPrefsUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <caret line="52" column="28" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/preferences.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="71" column="36" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#155#180#0" expanded="true" />
+            <element signature="e#281#308#0" expanded="true" />
+            <element signature="e#375#395#0" expanded="true" />
+            <element signature="e#529#563#0" expanded="true" />
+            <element signature="e#590#610#0" expanded="true" />
+            <element signature="e#787#826#0" expanded="true" />
+            <element signature="e#853#882#0" expanded="true" />
+            <element signature="e#1185#1223#0" expanded="true" />
+            <element signature="e#1250#1278#0" expanded="true" />
+            <element signature="e#1575#1610#0" expanded="true" />
+            <element signature="e#1637#1666#0" expanded="true" />
+            <element signature="e#2242#2271#0" expanded="true" />
+            <element signature="e#2339#2355#0" expanded="true" />
+            <element signature="e#2492#2523#0" expanded="true" />
+            <element signature="e#2591#2616#0" expanded="true" />
+            <element signature="e#2742#2761#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidVideoRecorder.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-pt/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="-18.25926">
+          <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.851851">
+          <caret line="22" column="40" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/droid/videoRecorder/DroidHeadService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5443478">
-          <caret line="184" column="72" selection-start-line="184" selection-start-column="72" selection-end-line="184" selection-end-column="72" />
+        <state vertical-scroll-proportion="-1.5304347">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2084#2085#0" expanded="true" />
-            <element signature="e#2115#2116#0" expanded="true" />
-            <element signature="e#5464#6721#0" expanded="true" />
-            <element signature="e#6720#6721#0" expanded="true" />
-            <element signature="method#onDestroy#0;class#DroidHeadService#0" expanded="false" />
-            <element signature="method#ShowView#0;class#DroidHeadService#0" expanded="false" />
-            <element signature="method#ChangeTypeViewCam#0;class#DroidHeadService#0" expanded="false" />
+            <element signature="e#3103#3130#0" expanded="true" />
+            <element signature="e#3348#3380#0" expanded="true" />
+            <element signature="e#3596#3624#0" expanded="true" />
+            <element signature="e#3842#3870#0" expanded="true" />
+            <element signature="e#4087#4116#0" expanded="true" />
+            <element signature="e#6885#6911#0" expanded="true" />
+            <element signature="e#7010#7038#0" expanded="true" />
+            <element signature="e#7190#7215#0" expanded="true" />
+            <element signature="e#7313#7340#0" expanded="true" />
+            <element signature="e#7492#7518#0" expanded="true" />
+            <element signature="e#7617#7645#0" expanded="true" />
+            <element signature="e#7796#7820#0" expanded="true" />
+            <element signature="e#7917#7946#0" expanded="true" />
+            <element signature="e#8151#8181#0" expanded="true" />
+            <element signature="e#17041#17080#0" expanded="true" />
+            <element signature="e#17229#17259#0" expanded="true" />
+            <element signature="e#17322#17352#0" expanded="true" />
+            <element signature="e#21476#21511#0" expanded="true" />
           </folding>
         </state>
       </provider>
