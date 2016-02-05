@@ -27,6 +27,54 @@ public class DroidPrefsUtils {
 
     }
 
+    public static boolean aceitaComandoPorVoz(final Context context)
+    {
+        boolean spf = false;
+        try
+        {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getBoolean("spf_aceitaComandoPorVoz", false);
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidVideo", ex.getMessage());
+        }
+        return spf;
+    }
+
+    public static boolean aceitaComandoPorTexto(final Context context)
+    {
+        boolean spf = false;
+        try
+        {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getBoolean("spf_aceitaComandoPorTexto", false);
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidVideo", ex.getMessage());
+        }
+        return spf;
+    }
+
+
+    public static boolean leComando(final Context context)
+    {
+        boolean spf = false;
+        try
+        {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getBoolean("spf_leComando", false);
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidVideo", ex.getMessage());
+        }
+        return spf;
+
+    }
+
+
     public static boolean exibeTempoGravacao(final Context context)
     {
         boolean spf = false;

@@ -2,6 +2,8 @@ package com.droid.videoRecorder;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,12 @@ import java.util.ArrayList;
  */
 
 public class DroidNotification extends NotificationListenerService {
+    private NotificationManager notifManager;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
@@ -30,16 +38,12 @@ public class DroidNotification extends NotificationListenerService {
         }
 
         if (!msgNotification.isEmpty()) {
-            if (msgNotification.contains("DVR=")) {
-                if (msgNotification != "") {
-                    Intent mIntent = new Intent();
-                    mIntent.setAction("DVRREC");
-                    mIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                    mIntent.putExtra("DVRREC", msgNotification);
-                    sendBroadcast(mIntent);
-                }
-            }
-
+            Intent mIntent = new Intent();
+            mIntent.setAction(DroidConstants.CHAVERECEIVER);
+            mIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            mIntent.putExtra(DroidConstants.CHAVERECEIVER, msgNotification);
+            sendBroadcast(mIntent);
+            this.cancelAllNotifications();
         }
     }
 
@@ -57,11 +61,11 @@ public class DroidNotification extends NotificationListenerService {
         if (desc == null) {
             Bundle bigExtras = mStatusBarNotification.getNotification().extras;
             CharSequence[] descArray = bigExtras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-            msg = descArray[descArray.length-1].toString();
-        }
-        else msg = desc.toString();
+            msg = descArray[descArray.length - 1].toString();
+        } else msg = desc.toString();
+        String msgCMD = msg.substring(0, DroidConstants.COMANDOINICIADOPOR.length());
 
-        if (msg.contains("DVR=")) {
+        if (DroidConstants.COMANDOINICIADOPOR.equalsIgnoreCase(msgCMD)) {
             return msg;
         } else return "";
     }
@@ -95,11 +99,11 @@ public class DroidNotification extends NotificationListenerService {
                     if (sMethodName.equals("setText")) {
                         fValue = actions.get(i).getClass().getDeclaredField("value");
                         fValue.setAccessible(true);
-                        sValue = fValue.get(actions.get(i)).toString();
-                        if (sValue.contains("DVR=")) {
+                        sValue = fValue.get(actions.get(i)).toString().substring(0, DroidConstants.COMANDOINICIADOPOR.length());
+                        String valueCMD = sValue.substring(0, DroidConstants.COMANDOINICIADOPOR.length());
+                        if (DroidConstants.COMANDOINICIADOPOR.equalsIgnoreCase(valueCMD)) {
                             return sValue;
-                        }
-                        break;
+                        } else return "";
                     }
                 } catch (Exception ex) {
                     //sValue = ex.getMessage();

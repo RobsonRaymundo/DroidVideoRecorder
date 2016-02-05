@@ -21,5 +21,7 @@ public class DroidConstants {
 
     public static final String CHAMADAPELOSERVICO = "chamadaPeloServico";
     public static final String CHAMADAPELODNP = "chamadaPeloDroidNotificationPlus";
+    public static final String CHAVERECEIVER = "DVRREC";
+    public static final String COMANDOINICIADOPOR = "DVR=";
 
 }

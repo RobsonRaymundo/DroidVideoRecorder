@@ -1,5 +1,6 @@
 package com.droid.videoRecorder;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.*;
+import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
@@ -17,7 +19,6 @@ import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -40,8 +41,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     public static boolean closeSensorProximity;
     public static boolean openSensorProximity;
     public static boolean currentCloseSensorProximity;
-    private boolean checkSensorGesture;
-    private boolean checkSensorProx;
+    private boolean aceitaComandoPorVoz;
     private SensorEventListener sensorEventListener;
     private SpeechRecognizer stt;
     private Intent mIntentRecognizer;
@@ -75,65 +75,55 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         tts.shutdown();
     }
 
+    private void Fala (final String text, final int queueMode)
+    {
+        if (DroidPrefsUtils.leComando(context))
+        {
+            tts.speak(text, queueMode, null);
+        }
+    }
 
     private void ConfigChamadaPeloDNP(Intent intent) {
         chamadaPeloDNP = intent.getStringExtra(DroidConstants.CHAMADAPELODNP);
-
         if (chamadaPeloDNP != null) {
-            switch (chamadaPeloDNP) {
 
-                case "DVR=INVISIBLE": {
-                    chatHead.setVisibility(View.INVISIBLE);
-                    txtHead.setVisibility(View.INVISIBLE);
-                    break;
-                }
-                case "DVR=STOP": {
-                    tts.speak("Parando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                    break;
-                }
-                case "DVR=VIEW": {
-                    tts.speak("Visualizando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
-                    break;
-                }
-                case "DVR=REC": {
-                    tts.speak("Gravando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                    break;
-                }
-                case "DVR=CLOSE": {
-                    tts.speak("Fechando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
-                    break;
-                }
-                case "DVR=QUIT": {
-                    tts.speak("Saindo do DVR", TextToSpeech.QUEUE_FLUSH, null);
-                    TimeSleep(2000);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                    break;
-                }
-
+            if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "I")) {
+                chatHead.setVisibility(View.INVISIBLE);
+                txtHead.setVisibility(View.INVISIBLE);
+            } else if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "S")) {
+                Fala(getString(R.string.parando), TextToSpeech.QUEUE_FLUSH);
+                SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+            } else if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "V")) {
+                Fala(getString(R.string.visualizando), TextToSpeech.QUEUE_FLUSH);
+                SetDrawRec(DroidConstants.EnumStateRecVideo.VIEW);
+            } else if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "R")) {
+                Fala(getString(R.string.gravando), TextToSpeech.QUEUE_FLUSH);
+                SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+            } else if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "C")) {
+                Fala(getString(R.string.fechando), TextToSpeech.QUEUE_FLUSH);
+                SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
+            } else if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "Q")) {
+                Fala(getString(R.string.saindoDVR), TextToSpeech.QUEUE_FLUSH);
+                TimeSleep(2000);
+                SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
             }
         }
-
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         mIntentService = intent;
-        ConfigChamadaPeloDNP(intent);
 
-        //   TimeSleep(2000);
-        //   SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+        if (DroidPrefsUtils.aceitaComandoPorTexto(context)) {
+            ConfigChamadaPeloDNP(intent);
+        }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getBaseContext();
-
 
         windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
@@ -174,48 +164,80 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
             }
         };
 
-
-        checkSensorProx = true;
-        checkSensorGesture = true;
-
-        EnabledSensorPriximity();
-
-        stt = SpeechRecognizer.createSpeechRecognizer(context);
-        mIntentRecognizer = getRecognizerIntent();
-        stt.setRecognitionListener(new BaseRecognitionListener() {
-            public void onResults(Bundle results) {
-                // Recupera as possíveis palavras que foram pronunciadas
-                ArrayList<String> words = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                Log.d("DroidWakeUp", "onResults: " + words);
-                if (words.contains("gravar")) {
-                    Log.d("DroidWakeUp", "Comando: gravar");
-                    tts.speak("Gravando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                } else if (words.contains("parar")) {
-                    Log.d("DroidWakeUp", "Comando: parar");
-                    tts.speak("Parando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                } else if (words.contains("fechar")) {
-                    Log.d("DroidWakeUp", "Comando: fechar");
-                    tts.speak("Fechando", TextToSpeech.QUEUE_FLUSH, null);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
-                } else if (words.contains("sair")) {
-                    Log.d("DroidWakeUp", "Comando: sair");
-                    tts.speak("Saindo do DVR", TextToSpeech.QUEUE_FLUSH, null);
-                    TimeSleep(2000);
-                    SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
-                } else {
-                    tts.speak("Não entendi o que voce disse", TextToSpeech.QUEUE_FLUSH, null);
-                    Log.d("DroidWakeUp", "Nao entendeu");
+        aceitaComandoPorVoz = DroidPrefsUtils.aceitaComandoPorVoz(context);
+        if (aceitaComandoPorVoz) {
+            EnabledSensorPriximity();
+            stt = SpeechRecognizer.createSpeechRecognizer(context);
+            mIntentRecognizer = getRecognizerIntent();
+            stt.setRecognitionListener(new RecognitionListener() {
+                public void onResults(Bundle results) {
+                    // Recupera as possíveis palavras que foram pronunciadas
+                    ArrayList<String> words = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                    Log.d("DroidWakeUp", "onResults: " + words);
+                    if (words.contains(getString(R.string.gravar))) {
+                        Log.d("DroidWakeUp", "Comando: gravar");
+                        Fala(getString(R.string.gravando), TextToSpeech.QUEUE_FLUSH);
+                        SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                    } else if (words.contains(getString(R.string.parar))) {
+                        Log.d("DroidWakeUp", "Comando: parar");
+                        Fala(getString(R.string.parando), TextToSpeech.QUEUE_FLUSH);
+                        SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                    } else if (words.contains(getString(R.string.fechar))) {
+                        Log.d("DroidWakeUp", "Comando: fechar");
+                        Fala(getString(R.string.fechando), TextToSpeech.QUEUE_FLUSH);
+                        SetDrawRec(DroidConstants.EnumStateRecVideo.CLOSE);
+                    } else if (words.contains(getString(R.string.sair))) {
+                        Log.d("DroidWakeUp", "Comando: sair");
+                        Fala(getString(R.string.saindoDVR), TextToSpeech.QUEUE_FLUSH);
+                        TimeSleep(2000);
+                        SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
+                    } else {
+                        Fala(getString(R.string.naoEntendi), TextToSpeech.QUEUE_FLUSH);
+                        Log.d("DroidWakeUp", "Nao entendeu");
+                    }
                 }
-            }
 
-            @Override
-            public void onError(int error) {
-                super.onError(error);
-            }
-        });
+                @Override
+                public void onPartialResults(Bundle partialResults) {
 
+                }
+
+                @Override
+                public void onEvent(int eventType, Bundle params) {
+
+                }
+
+                @Override
+                public void onReadyForSpeech(Bundle params) {
+
+                }
+
+                @Override
+                public void onBeginningOfSpeech() {
+
+                }
+
+                @Override
+                public void onRmsChanged(float rmsdB) {
+
+                }
+
+                @Override
+                public void onBufferReceived(byte[] buffer) {
+
+                }
+
+                @Override
+                public void onEndOfSpeech() {
+
+                }
+
+                @Override
+                public void onError(int error) {
+
+                }
+            });
+        }
     }
 
     protected Intent getRecognizerIntent() {
@@ -223,7 +245,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "pt-BR");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
         return intent;
     }
@@ -254,13 +276,13 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     }
 
     private void EnabledSensorPriximity() {
-        if (checkSensorGesture || checkSensorProx) {
+        if (aceitaComandoPorVoz) {
             SetSensorProximity(true);
         }
     }
 
     private void DisabledSensorPriximity() {
-        if (checkSensorGesture || checkSensorProx) {
+        if (aceitaComandoPorVoz) {
             SetSensorProximity(false);
         }
     }
@@ -403,13 +425,12 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     public void onInit(int status) {
         tts.setLanguage(Locale.getDefault());
         if (chamadaPeloDNP != null) {
-            if (chamadaPeloDNP.contains("DVR=INVISIBLE")) {
-                tts.speak("Abrindo DVR em modo invisivel", TextToSpeech.QUEUE_FLUSH, null);
-            } else if (chamadaPeloDNP.contains("DVR=OPEN")) {
-                tts.speak("Abrindo DVR", TextToSpeech.QUEUE_FLUSH, null);
+            if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "I")) {
+                Fala(getString(R.string.abrindoDVRInvisivel), TextToSpeech.QUEUE_FLUSH);
+            } else if (chamadaPeloDNP.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "O")) {
+                Fala(getString(R.string.abrindoDVR), TextToSpeech.QUEUE_FLUSH);
             }
-        }
-        else tts.speak("Abrindo DVR", TextToSpeech.QUEUE_FLUSH, null);
+        } else Fala(getString(R.string.abrindoDVR), TextToSpeech.QUEUE_FLUSH);
     }
 
     private class Sincronizar extends AsyncTask<Void, Integer, Void> {
@@ -526,7 +547,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
             if (currentCloseSensorProximity && closeSensorProximity && openSensorProximity) {
 
                 if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.RECORD) {
-                    tts.speak("Parando a gravação", TextToSpeech.QUEUE_FLUSH, null);
+                    Fala(getString(R.string.parandoGravacao), TextToSpeech.QUEUE_FLUSH);
                     SetDrawRec(DroidConstants.EnumStateRecVideo.RECORD);
                 } else {
                     // Inicia o Listener do reconhecimento de voz
@@ -543,10 +564,6 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
 
         }
     }
-
-    ;
-
-
 }
 
 

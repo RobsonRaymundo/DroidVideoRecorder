@@ -12,4 +12,23 @@
     <string name="spf_titulo">Time</string>
     <string name="txt_gravacao_videos">Local recording of videos</string>
     <string name="txt_local_gravacao_videos">Internal</string>
+    <string name="parando">Stopping</string>
+    <string name="visualizando">Viewing</string>
+    <string name="gravando">Recording</string>
+    <string name="fechando">Closing</string>
+    <string name="saindoDVR">Leaving the DVR</string>
+    <string name="gravar">Record</string>
+    <string name="parar">Stop</string>
+    <string name="fechar">Close</string>
+    <string name="sair">Get out</string>
+    <string name="naoEntendi">Did not understand what you said</string>
+    <string name="abrindoDVRInvisivel">Opening DVR in invisible mode</string>
+    <string name="abrindoDVR">Opening DVR</string>
+    <string name="parandoGravacao">Stop Recording</string>
+    <string name="leComando">Read the commands</string>
+    <string name="aceitaComandoPorVoz">Supports voice control</string>
+    <string name="aceitaComandoPorTexto">Accepts command by text</string>
+    <string name="escuta">Listening</string>
+    <string name="comandoPorTexto">Command by text</string>
+    <string name="fala">Speaks</string>
 </resources>

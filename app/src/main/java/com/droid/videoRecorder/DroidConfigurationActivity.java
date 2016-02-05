@@ -1,5 +1,6 @@
 package com.droid.videoRecorder;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         boolean chamadaPeloDNF = false;
         try {
 
-            chamadaPeloDNF = getIntent().getStringExtra(DroidConstants.CHAMADAPELODNP).equals("DVR=CONFIG");
+            chamadaPeloDNF = getIntent().getStringExtra(DroidConstants.CHAMADAPELODNP).equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "D");
 
         } catch (Exception ex) {
 
@@ -81,6 +82,8 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         }
         super.onCreate(savedInstanceState);
 
+
+
         if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPeloDNP) {
             addPreferencesFromResource(R.xml.preferences);
 
@@ -114,6 +117,12 @@ public class DroidConfigurationActivity extends PreferenceActivity {
                     return true;
                 }
             });
+
+
+
+
+
+
 
         } else finish();
 

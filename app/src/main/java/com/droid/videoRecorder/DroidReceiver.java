@@ -18,8 +18,8 @@ public class DroidReceiver extends BroadcastReceiver {
             mIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             mIntent.setAction(Intent.ACTION_MAIN);
             mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            String messageBroadCast = intent.getStringExtra("DVRREC");
-            Toast.makeText(context, messageBroadCast, Toast.LENGTH_LONG).show();
+            String messageBroadCast = intent.getStringExtra(DroidConstants.CHAVERECEIVER);
+            //Toast.makeText(context, messageBroadCast, Toast.LENGTH_LONG).show();
             mIntent.putExtra(DroidConstants.CHAMADAPELODNP, messageBroadCast );
             context.startActivity(mIntent);
         }catch (Exception ex)
