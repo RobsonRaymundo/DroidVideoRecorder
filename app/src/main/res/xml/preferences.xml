@@ -42,14 +42,6 @@
             android:defaultValue="0">
         </ListPreference>
 
-        <Preference
-            android:summary="Permite acessar todas as notificações"
-            android:title="Acesso à Notificação" >
-            <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS">
-            </intent>
-        </Preference>
-
-
         <SwitchPreference
             android:key="spf_aceitaComandoPorVoz"
             android:summary="@string/aceitaComandoPorVoz"
@@ -61,9 +53,8 @@
             android:key="spf_aceitaComandoPorTexto"
             android:summary="@string/aceitaComandoPorTexto"
             android:defaultValue="false"
-            android:title="@string/comandoPorTexto">
+            android:title="@string/comando">
         </SwitchPreference>
-
 
         <SwitchPreference
             android:key="spf_leComando"

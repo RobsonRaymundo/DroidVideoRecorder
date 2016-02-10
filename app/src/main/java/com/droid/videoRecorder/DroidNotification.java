@@ -1,16 +1,11 @@
 package com.droid.videoRecorder;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.view.accessibility.AccessibilityEvent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -19,7 +14,6 @@ import java.util.ArrayList;
  */
 
 public class DroidNotification extends NotificationListenerService {
-    private NotificationManager notifManager;
 
     @Override
     public void onCreate() {

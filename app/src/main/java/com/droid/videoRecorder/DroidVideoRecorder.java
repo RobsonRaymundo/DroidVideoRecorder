@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import android.util.Log;
 
-
 public class DroidVideoRecorder {
     private static Camera mServiceCamera;
     private static MediaRecorder mMediaRecorder;
@@ -36,7 +35,7 @@ public class DroidVideoRecorder {
     public static String GetPathStorage() {
         String strSDCardPath = "";
         String strDirectory = "";
-        String strPaste = "/DroidVideoRecorder/";
+
         try {
 
             if (LocalGravacaoVideo == 1) { // Cartao SD
@@ -45,14 +44,14 @@ public class DroidVideoRecorder {
                     if ((null == strSDCardPath) || (strSDCardPath.length() == 0)) {
                         strSDCardPath = System.getenv("EXTERNAL_SDCARD_STORAGE");
                     }
-                    strDirectory = CreateGetDirectory(strSDCardPath + strPaste);
+                    strDirectory = CreateGetDirectory(strSDCardPath + DroidConstants.PASTADOSARQUIVOSGRAVADOS);
                 }
             }
         } catch (Exception e) {
         } finally {
             if (strSDCardPath == "" || strDirectory == "") {
                 strSDCardPath = Environment.getExternalStorageDirectory().toString();
-                strDirectory = CreateGetDirectory(strSDCardPath + strPaste);
+                strDirectory = CreateGetDirectory(strSDCardPath + DroidConstants.PASTADOSARQUIVOSGRAVADOS);
             }
         }
         return strDirectory;

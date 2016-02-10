@@ -1,15 +1,15 @@
 package com.droid.videoRecorder;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.provider.SyncStateContract;
-
-import java.util.prefs.Preferences;
+import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
+import android.provider.Settings;
+import android.util.Log;
 
 /**
  * Created by Robson on 12/01/2016.
@@ -19,53 +19,23 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     private ListPreference ltp_qualidadeCameraFrontal;
     private ListPreference ltp_qualidadeCameraTraseira;
     private ListPreference ltp_localGravacaoVideo;
+    private SwitchPreference spf_aceitaComandoPorTexto;
+    private boolean canFinish;
 
     private boolean ExibeTelaInicial() {
-        boolean exibeTelaInicial = true;
-        try {
-            exibeTelaInicial = DroidPrefsUtils.exibeTelaInicial(context);
-        } catch (Exception ex) {
-
-        }
-        return exibeTelaInicial;
+        return DroidPrefsUtils.exibeTelaInicial(context);
     }
 
     private boolean ChamadaPeloServico() {
-        boolean chamadaPeloServico = false;
-        try {
-            chamadaPeloServico = getIntent().getBooleanExtra(DroidConstants.CHAMADAPELOSERVICO, false);
-        } catch (Exception ex) {
-
-        }
-        return chamadaPeloServico;
+        return DroidPrefsUtils.chamadaPeloServico(getIntent());
     }
 
-    private boolean ChamadaConfigPeloDNP()
-    {
-        boolean chamadaPeloDNF = false;
-        try {
-
-            chamadaPeloDNF = getIntent().getStringExtra(DroidConstants.CHAMADAPELODNP).equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "D");
-
-        } catch (Exception ex) {
-
-        }
-        return chamadaPeloDNF;
-
+    private boolean ChamadaConfigPorComandoTexto() {
+        return DroidPrefsUtils.chamadaPorComandoTexto(getIntent());
     }
 
-    private String ChamadaBroadCastPeloDNP()
-    {
-        String chamadaPeloDNF = "";
-        try {
-
-            chamadaPeloDNF = getIntent().getStringExtra(DroidConstants.CHAMADAPELODNP);
-
-        } catch (Exception ex) {
-
-        }
-        return chamadaPeloDNF;
-
+    private String ChamadaBroadCastPorComandoTexto() {
+        return DroidPrefsUtils.chamadaBroadCastPorComandoTexto(getIntent());
     }
 
     @Override
@@ -73,18 +43,17 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         context = getBaseContext();
         boolean exibeTelaInicial = ExibeTelaInicial();
         boolean chamadaPeloServico = ChamadaPeloServico();
-        boolean chamadaConfigPeloDNP = ChamadaConfigPeloDNP();
+        boolean chamadaConfigPorComandoTexto = ChamadaConfigPorComandoTexto();
 
-        if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPeloDNP ) {
+        if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPorComandoTexto) {
             setTheme(R.style.DefaultTheme);
         } else {
             setTheme(R.style.TranslucentTheme);
         }
         super.onCreate(savedInstanceState);
+        canFinish = true;
 
-
-
-        if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPeloDNP) {
+        if (exibeTelaInicial || chamadaPeloServico || chamadaConfigPorComandoTexto) {
             addPreferencesFromResource(R.xml.preferences);
 
             ltp_qualidadeCameraFrontal = (ListPreference) findPreference("ltp_qualidadeCameraFrontal");
@@ -118,34 +87,52 @@ public class DroidConfigurationActivity extends PreferenceActivity {
                 }
             });
 
+            spf_aceitaComandoPorTexto = (SwitchPreference) findPreference("spf_aceitaComandoPorTexto");
 
 
+            spf_aceitaComandoPorTexto.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    try {
+                        Boolean aceita = (Boolean) newValue;
+                        Boolean status = DroidPrefsUtils.statusComandoPorTexto(context);
+                        if (aceita != status) {
+                            startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                            canFinish = false;
+                        }
 
 
-
+                    } catch (Exception ex) {
+                        Log.d("DVR", ex.getMessage());
+                    }
+                    return true;
+                }
+            });
 
         } else finish();
 
         if (!chamadaPeloServico) {
             Intent intentService = new Intent(context, DroidHeadService.class);
-            intentService.putExtra(DroidConstants.CHAMADAPELODNP, ChamadaBroadCastPeloDNP());
+            intentService.putExtra(DroidConstants.CHAMADAPORCOMANDOTEXTO, ChamadaBroadCastPorComandoTexto());
             startService(intentService);
         }
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        if (!ExibeTelaInicial() && !ChamadaPeloServico() && !ChamadaConfigPeloDNP()) {
-           finish();
+        if (!ExibeTelaInicial() && !ChamadaPeloServico() && !ChamadaConfigPorComandoTexto()) {
+            finish();
+        } else {
+            spf_aceitaComandoPorTexto.setChecked(DroidPrefsUtils.statusComandoPorTexto(context));
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
+        if (canFinish) finish();
     }
 }

@@ -29,6 +29,13 @@
     <string name="aceitaComandoPorVoz">Aceita comando por voz</string>
     <string name="aceitaComandoPorTexto">Aceita comando por texto</string>
     <string name="escuta">Escuta</string>
-    <string name="comandoPorTexto">Comando por texto</string>
+    <string name="comando">Comando</string>
     <string name="fala">Fala</string>
+    <string name="abrindoDVRConfig">Abrindo DVR com a tela de configuração</string>
+    <string name="visualizandoCameraFronta">Visualizando com a câmera frontal</string>
+    <string name="visualizandoCameraTraseira">Visualizando com a câmera traseira</string>
+    <string name="abrirConfiguracao">Abrir Configuração</string>
+    <string name="modoOculto">modo oculto</string>
+    <string name="modoVisivel">modo visível</string>
+    <string name="voltar">voltar</string>
 </resources>

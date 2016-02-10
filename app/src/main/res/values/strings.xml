@@ -29,6 +29,13 @@
     <string name="aceitaComandoPorVoz">Supports voice control</string>
     <string name="aceitaComandoPorTexto">Accepts command by text</string>
     <string name="escuta">Listening</string>
-    <string name="comandoPorTexto">Command by text</string>
+    <string name="comando">Command</string>
     <string name="fala">Speaks</string>
+    <string name="abrindoDVRConfig">Opening DVR with a configuration screen</string>
+    <string name="visualizandoCameraFronta">Viewing with the front camera</string>
+    <string name="visualizandoCameraTraseira">Viewing with the rear camera</string>
+    <string name="abrirConfiguracao">Open Configuration</string>
+    <string name="modoOculto">hidden mode</string>
+    <string name="modoVisivel">visible mode</string>
+    <string name="voltar">come back</string>
 </resources>
