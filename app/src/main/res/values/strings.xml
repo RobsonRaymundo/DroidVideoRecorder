@@ -22,8 +22,6 @@
     <string name="fechar">Close</string>
     <string name="sair">Get out</string>
     <string name="naoEntendi">Did not understand what you said</string>
-    <string name="abrindoDVRInvisivel">Opening DVR in invisible mode</string>
-    <string name="abrindoDVR">Opening DVR</string>
     <string name="parandoGravacao">Stop Recording</string>
     <string name="leComando">Read the commands</string>
     <string name="aceitaComandoPorVoz">Supports voice control</string>
@@ -31,6 +29,7 @@
     <string name="escuta">Listening</string>
     <string name="comando">Command</string>
     <string name="fala">Speaks</string>
+    <string name="abrindoDVR">Opening DVR</string>
     <string name="abrindoDVRConfig">Opening DVR with a configuration screen</string>
     <string name="visualizandoCameraFronta">Viewing with the front camera</string>
     <string name="visualizandoCameraTraseira">Viewing with the rear camera</string>
@@ -38,4 +37,5 @@
     <string name="modoOculto">hidden mode</string>
     <string name="modoVisivel">visible mode</string>
     <string name="voltar">come back</string>
+    <string name="gravandoModoOculto">Recording in hidden mode</string>
 </resources>

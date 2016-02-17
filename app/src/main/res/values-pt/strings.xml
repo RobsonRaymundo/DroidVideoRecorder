@@ -22,8 +22,6 @@
     <string name="fechar">fechar</string>
     <string name="sair">sair</string>
     <string name="naoEntendi">Não entendi o que voce disse</string>
-    <string name="abrindoDVRInvisivel">Abrindo DVR em modo invisível</string>
-    <string name="abrindoDVR">Abrindo DVR</string>
     <string name="parandoGravacao">Parando a gravação</string>
     <string name="leComando">Lê os comandos</string>
     <string name="aceitaComandoPorVoz">Aceita comando por voz</string>
@@ -31,6 +29,7 @@
     <string name="escuta">Escuta</string>
     <string name="comando">Comando</string>
     <string name="fala">Fala</string>
+    <string name="abrindoDVR">Abrindo DVR</string>
     <string name="abrindoDVRConfig">Abrindo DVR com a tela de configuração</string>
     <string name="visualizandoCameraFronta">Visualizando com a câmera frontal</string>
     <string name="visualizandoCameraTraseira">Visualizando com a câmera traseira</string>
@@ -38,4 +37,5 @@
     <string name="modoOculto">modo oculto</string>
     <string name="modoVisivel">modo visível</string>
     <string name="voltar">voltar</string>
+    <string name="gravandoModoOculto">Gravando em modo oculto</string>
 </resources>

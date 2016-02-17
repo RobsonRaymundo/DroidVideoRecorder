@@ -10,14 +10,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.*;
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -41,21 +40,20 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     public static boolean closeSensorProximity;
     public static boolean openSensorProximity;
     public static boolean currentCloseSensorProximity;
+
+    private boolean necessarioComandoDepoisDoInit = false;
     private boolean aceitaComandoPorVoz;
     private SensorEventListener sensorEventListener;
     private SpeechRecognizer stt;
     private Intent mIntentRecognizer;
     private Intent mIntentService;
     private TextToSpeech tts;
+    private ArrayList<DroidConstants.EnumStateRecVideo> stateRecVideoSTOP;
+    private ArrayList<DroidConstants.EnumStateRecVideo> stateRecVideoVIEW;
+    private ArrayList<DroidConstants.EnumStateRecVideo> stateRecVideoREC;
+    private ArrayList<DroidConstants.EnumStateRecVideo> stateRecVideoCLOSE;
 
     OrientationEventListener myOrientationEventListener;
-
-    private void TimeSleep(Integer seg) {
-        try {
-            Thread.sleep(seg);
-        } catch (Exception ex) {
-        }
-    }
 
     WindowManager.LayoutParams params = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -64,48 +62,29 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
 
+    private void TimeSleep(Integer seg) {
+        try {
+            Thread.sleep(seg);
+        } catch (Exception ex) {
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         // Not used
         return null;
     }
 
-    private void StopService() {
-        context.stopService(mIntentService);
-        tts.shutdown();
-    }
-
-    private void Fala(final String text) {
-        if (DroidPrefsUtils.leComando(context)) {
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-            TimeSleep(2000);
-        }
-    }
-
-    private void ConfigChamadaPorComandoTexto(Intent intent) {
-        chamadaPorComandoTexto = intent.getStringExtra(DroidConstants.CHAMADAPORCOMANDOTEXTO);
-        if (chamadaPorComandoTexto != null) {
-
-            if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "I")) {
-                ModoOculto();
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "S")) {
-                Parar();
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "V")) {
-                Visualizar();
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "R")) {
-                Gravar();
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "C")) {
-                Fechar();
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "Q")) {
-                Sair();
-            }
-        }
-    }
-
-    private void ModoOculto() {
-        Fala(getString(R.string.modoOculto));
-        chatHead.setVisibility(View.INVISIBLE);
-        txtHead.setVisibility(View.INVISIBLE);
+    @Override
+    public void onInit(int status) {
+        necessarioComandoDepoisDoInit = true;
+        if (ComandoPorTexto("MIR")) {
+            GravarModoOculto();
+        } else if (ComandoPorTexto("R")) {
+            Gravar();
+        } else if (ComandoPorTexto("CFG")) {
+            AbrirConfig();
+        } else Abrir();
     }
 
     @Override
@@ -113,8 +92,22 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         super.onStart(intent, startId);
         mIntentService = intent;
 
-        if (DroidPrefsUtils.aceitaComandoPorTexto(context)) {
-            ConfigChamadaPorComandoTexto(intent);
+        if (ComandoPorTexto("MI")) {
+            ModoOculto();
+        } else if (ComandoPorTexto("MIR")) {
+            ModoOcultoSemFala();
+        } else if (ComandoPorTexto("MV")) {
+            ModoVisivel();
+        } else if (ComandoPorTexto("S")) {
+            Parar();
+        } else if (ComandoPorTexto("V")) {
+            Visualizar();
+        } else if (ComandoPorTexto("R")) {
+            Gravar();
+        } else if (ComandoPorTexto("C")) {
+            Fechar();
+        } else if (ComandoPorTexto("Q")) {
+            Sair();
         }
     }
 
@@ -125,97 +118,24 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         InicializarAcao();
     }
 
-    private void InicializarAcao() {
-        txtHead.setOnTouchListener(onTouchListener);
-        chatHead.setOnTouchListener(onTouchListener);
-
-        myOrientationEventListener = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
-            @Override
-            public void onOrientationChanged(int arg0) {
-                // TODO Auto-generated method stub
-                orientationEvent = arg0;
-            }
-        };
-
-        if (aceitaComandoPorVoz) {
-            EnabledSensorPriximity();
-            stt = SpeechRecognizer.createSpeechRecognizer(context);
-            mIntentRecognizer = getRecognizerIntent();
-            stt.setRecognitionListener(new RecognitionListener() {
-                public void onResults(Bundle results) {
-                    // Recupera as possíveis palavras que foram pronunciadas
-                    ArrayList<String> words = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-
-                    Log.d("DroidWakeUp", "onResults: " + words);
-                    if (words.contains(getString(R.string.gravar))) {
-                        Gravar();
-                    } else if (words.contains(getString(R.string.parar))) {
-                        Parar();
-                    } else if (words.contains(getString(R.string.fechar))) {
-                        Fechar();
-                    } else if (words.contains(getString(R.string.sair))) {
-                        Sair();
-                    } else if (words.contains(getString(R.string.voltar))) {
-                        ShowStop();
-                    } else if (words.contains (getString(R.string.abrirConfiguracao))) {
-                        AbrirConfig();
-                    } else if (words.contains (getString(R.string.modoOculto))) {
-                        ModoOculto();
-                    } else if (words.contains (getString(R.string.modoVisivel))) {
-                        ModoVisivel();
-                    } else {
-                        NaoEntendi();
-                    }
-                }
-
-                @Override
-                public void onPartialResults(Bundle partialResults) {
-
-                }
-
-                @Override
-                public void onEvent(int eventType, Bundle params) {
-
-                }
-
-                @Override
-                public void onReadyForSpeech(Bundle params) {
-
-                }
-
-                @Override
-                public void onBeginningOfSpeech() {
-
-                }
-
-                @Override
-                public void onRmsChanged(float rmsdB) {
-
-                }
-
-                @Override
-                public void onBufferReceived(byte[] buffer) {
-
-                }
-
-                @Override
-                public void onEndOfSpeech() {
-
-                }
-
-                @Override
-                public void onError(int error) {
-
-                }
-            });
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //call widget update methods/services/broadcasts
+        if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
+            DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
         }
     }
 
-    private void ModoVisivel() {
-        Fala(getString(R.string.modoVisivel));
-        chatHead.setVisibility(View.VISIBLE);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (chatHead != null) windowManager.removeView(chatHead);
+        if (txtHead != null) windowManager.removeView(txtHead);
+        if (mSurfaceView != null) windowManager.removeView(mSurfaceView);
+        DisabledSensorPriximity();
+        Vibrar(100);
     }
-
 
     private void InicializarVariavel() {
         context = getBaseContext();
@@ -244,16 +164,192 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         onTouchListener = new TouchListener();
         aceitaComandoPorVoz = DroidPrefsUtils.aceitaComandoPorVoz(context);
         tts.setLanguage(Locale.getDefault());
+
+        stateRecVideoSTOP = new ArrayList<>();
+        stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.VIEW);
+        stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.RECORD);
+        stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.CLOSE);
+
+        stateRecVideoSTOP = new ArrayList<>();
+        stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.VIEW);
+        stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.RECORD);
+        stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.CLOSE);
+
+        stateRecVideoVIEW = new ArrayList<>();
+        stateRecVideoVIEW.add(DroidConstants.EnumStateRecVideo.RECORD);
+        stateRecVideoVIEW.add(DroidConstants.EnumStateRecVideo.STOP);
+
+        stateRecVideoREC = new ArrayList<>();
+        stateRecVideoREC.add(DroidConstants.EnumStateRecVideo.STOP);
+
+        stateRecVideoCLOSE = new ArrayList<>();
+        stateRecVideoCLOSE.add(DroidConstants.EnumStateRecVideo.CLOSE);
+        stateRecVideoCLOSE.add(DroidConstants.EnumStateRecVideo.STOP);
+
     }
 
-    protected Intent getRecognizerIntent() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
-        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
-        return intent;
+    private void InicializarAcao() {
+        txtHead.setOnTouchListener(onTouchListener);
+        chatHead.setOnTouchListener(onTouchListener);
+
+        myOrientationEventListener = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
+            @Override
+            public void onOrientationChanged(int arg0) {
+                // TODO Auto-generated method stub
+                orientationEvent = arg0;
+            }
+        };
+
+        if (aceitaComandoPorVoz) {
+            EnabledSensorPriximity();
+            stt = SpeechRecognizer.createSpeechRecognizer(context);
+            mIntentRecognizer = DroidBaseRecognitionListener.getRecognizerIntent(context);
+            stt.setRecognitionListener(new DroidBaseRecognitionListener() {
+                public void onResults(Bundle results) {
+                    // Recupera as possíveis palavras que foram pronunciadas
+                    ArrayList<String> words = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+
+                    Log.d("DroidWakeUp", "onResults: " + words);
+                    if (words.contains(getString(R.string.gravar))) {
+                        Gravar();
+                    } else if (words.contains(getString(R.string.parar))) {
+                        Parar();
+                    } else if (words.contains(getString(R.string.fechar))) {
+                        Fechar();
+                    } else if (words.contains(getString(R.string.sair))) {
+                        Sair();
+                    } else if (words.contains(getString(R.string.voltar))) {
+                        ShowStop();
+                    } else if (words.contains(getString(R.string.abrirConfiguracao))) {
+                        AbrirConfig();
+                    } else if (words.contains(getString(R.string.modoOculto))) {
+                        ModoOculto();
+                    } else if (words.contains(getString(R.string.modoVisivel))) {
+                        ModoVisivel();
+                    } else {
+                        NaoEntendi();
+                    }
+                }
+            });
+        }
+    }
+
+    private void StopService() {
+        context.stopService(mIntentService);
+        tts.shutdown();
+    }
+
+    private void FalaComAtraso(final String text, int atrasoSeg) {
+        if (DroidPrefsUtils.leComando(context)) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+            TimeSleep(atrasoSeg * 1000);
+        }
+    }
+
+    private void Fala(final String text) {
+        if (DroidPrefsUtils.leComando(context)) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        }
+    }
+
+    private boolean ComandoPorTexto(String cmd) {
+        boolean ret = false;
+        if (DroidPrefsUtils.aceitaComandoPorTexto(context)) {
+            chamadaPorComandoTexto = mIntentService.getStringExtra(DroidConstants.CHAMADAPORCOMANDOTEXTO);
+            if (chamadaPorComandoTexto != null) {
+                ret = chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + cmd);
+            }
+        }
+        return ret;
+    }
+
+    private void Abrir() {
+        Fala(getString(R.string.abrindoDVR));
+    }
+
+    private void AbrirConfig() {
+        Fala(getString(R.string.abrindoDVRConfig));
+        ShowActivity();
+    }
+
+    private void Gravar() {
+        Gravacao(false);
+    }
+
+    private void Gravacao(boolean gravarModoOculto) {
+        if (necessarioComandoDepoisDoInit) {
+            if (Permite(DroidVideoRecorder.StateRecVideo.RECORD)) {
+                if (gravarModoOculto) {
+                    Fala(getString(R.string.gravandoModoOculto));
+                } else {
+                    Fala(getString(R.string.gravando));
+                }
+            }
+            ShowRec();
+        }
+    }
+
+    private void Parar() {
+        if (Permite(DroidVideoRecorder.StateRecVideo.STOP)) {
+            Fala(getString(R.string.parandoGravacao));
+            ShowStopRecord(true);
+        }
+    }
+
+    private void Visualizar() {
+        if (Permite(DroidVideoRecorder.StateRecVideo.VIEW)) {
+            Fala(getString(R.string.visualizando));
+            ShowView();
+        }
+    }
+
+    private void VisualizarTrocandoCamera() {
+        if (Permite(DroidVideoRecorder.StateRecVideo.VIEW)) {
+            ShowStopRecord(false);
+            ChangeTypeViewCam();
+        }
+    }
+
+    private void Fechar() {
+        if (Permite(DroidVideoRecorder.StateRecVideo.CLOSE)) {
+            Fala(getString(R.string.fechando));
+            ShowClose();
+        }
+    }
+
+    private void Sair() {
+        if (Permite(DroidVideoRecorder.StateRecVideo.CLOSE)) {
+            FalaComAtraso(getString(R.string.saindoDVR), 2);
+            StopService();
+        }
+    }
+
+    private void NaoEntendi() {
+        Fala(getString(R.string.naoEntendi));
+    }
+
+    private void GravarModoOculto() {
+        Gravacao(true);
+    }
+
+    private void ModoOculto() {
+        Fala(getString(R.string.modoOculto));
+        chatHead.setVisibility(View.INVISIBLE);
+        txtHead.setVisibility(View.INVISIBLE);
+    }
+    private void ModoOcultoSemFala() {
+        chatHead.setVisibility(View.INVISIBLE);
+        txtHead.setVisibility(View.INVISIBLE);
+    }
+
+    private void ModoVisivel() {
+        Fala(getString(R.string.modoVisivel));
+        chatHead.setVisibility(View.VISIBLE);
+        if (DroidPrefsUtils.exibeTempoGravacao(this))
+        {
+            txtHead.setVisibility(View.VISIBLE);
+        }
+
     }
 
     public void SetSensorProximity(boolean turnOn) {
@@ -291,25 +387,6 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         if (aceitaComandoPorVoz) {
             SetSensorProximity(false);
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //call widget update methods/services/broadcasts
-        if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
-            DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (chatHead != null) windowManager.removeView(chatHead);
-        if (txtHead != null) windowManager.removeView(txtHead);
-        if (mSurfaceView != null) windowManager.removeView(mSurfaceView);
-        DisabledSensorPriximity();
-        Vibrar(100);
     }
 
     private void ShowView() {
@@ -389,56 +466,17 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         startActivity(mItent);
     }
 
-    private void Abrir() {
-        if (chamadaPorComandoTexto != null) {
-            if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "I")) {
-                Fala(getString(R.string.abrindoDVRInvisivel));
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "O")) {
-                Fala(getString(R.string.abrindoDVR));
-            } else if (chamadaPorComandoTexto.equalsIgnoreCase(DroidConstants.COMANDOINICIADOPOR + "CFG")) {
-                AbrirConfig();
-            }
-        } else Fala(getString(R.string.abrindoDVR));
-    }
+    private boolean Permite(DroidConstants.EnumStateRecVideo stateRecVideo) {
 
-    private void AbrirConfig() {
-        Fala(getString(R.string.abrindoDVRConfig));
-        ShowActivity();
-    }
-
-    private void Gravar() {
-        Fala(getString(R.string.gravando));
-        ShowRec();
-    }
-
-    private void Parar() {
-
-        Fala(getString(R.string.parandoGravacao));
-        ShowStopRecord(true);
-    }
-
-    private void Visualizar() {
-        Fala(getString(R.string.visualizando));
-        ShowView();
-    }
-
-    private void VisualizarTrocandoCamera() {
-        ShowStopRecord(false);
-        ChangeTypeViewCam();
-    }
-
-    private void Fechar() {
-        Fala(getString(R.string.fechando));
-        ShowClose();
-    }
-
-    private void Sair() {
-        Fala(getString(R.string.saindoDVR));
-        StopService();
-    }
-
-    private void NaoEntendi() {
-        Fala(getString(R.string.naoEntendi));
+        if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.STOP) {
+            return stateRecVideoSTOP.contains(stateRecVideo);
+        } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.VIEW) {
+            return stateRecVideoVIEW.contains(stateRecVideo);
+        } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.RECORD) {
+            return stateRecVideoREC.contains(stateRecVideo);
+        } else if (DroidVideoRecorder.StateRecVideo == DroidConstants.EnumStateRecVideo.CLOSE) {
+            return stateRecVideoCLOSE.contains(stateRecVideo);
+        } else return false;
     }
 
     private void Vibrar(int valor) {
@@ -447,11 +485,6 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
             v.vibrate(valor);
         } catch (Exception ex) {
         }
-    }
-
-    @Override
-    public void onInit(int status) {
-        Abrir();
     }
 
     private class Sincronizar extends AsyncTask<Void, Integer, Void> {
@@ -499,9 +532,6 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
             txtHead.setText(df.format(values[1]) + ":" + df.format(values[0]));
         }
     }
-
-
-
 
     public class TouchListener implements View.OnTouchListener {
 
