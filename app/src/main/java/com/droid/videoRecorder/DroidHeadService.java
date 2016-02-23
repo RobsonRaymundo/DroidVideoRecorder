@@ -176,6 +176,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         stateRecVideoSTOP.add(DroidConstants.EnumStateRecVideo.CLOSE);
 
         stateRecVideoVIEW = new ArrayList<>();
+        stateRecVideoVIEW.add(DroidConstants.EnumStateRecVideo.VIEW);
         stateRecVideoVIEW.add(DroidConstants.EnumStateRecVideo.RECORD);
         stateRecVideoVIEW.add(DroidConstants.EnumStateRecVideo.STOP);
 
