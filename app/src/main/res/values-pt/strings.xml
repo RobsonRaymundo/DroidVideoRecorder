@@ -21,7 +21,7 @@
     <string name="parar">parar</string>
     <string name="fechar">fechar</string>
     <string name="sair">sair</string>
-    <string name="naoEntendi">Não entendi o que voce disse</string>
+    <string name="naoEntendi">Não entendi o que você disse</string>
     <string name="parandoGravacao">Parando a gravação</string>
     <string name="leComando">Lê os comandos</string>
     <string name="aceitaComandoPorVoz">Aceita comando por voz</string>
