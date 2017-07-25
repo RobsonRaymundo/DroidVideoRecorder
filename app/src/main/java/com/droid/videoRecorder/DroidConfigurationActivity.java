@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.util.Log;
@@ -21,6 +23,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     private ListPreference ltp_localGravacaoVideo;
     private SwitchPreference spf_aceitaComandoPorTexto;
     private boolean canFinish;
+    static int sdk_int = android.os.Build.VERSION.SDK_INT;
 
     private boolean ExibeTelaInicial() {
         return DroidPrefsUtils.exibeTelaInicial(context);
@@ -87,28 +90,33 @@ public class DroidConfigurationActivity extends PreferenceActivity {
                 }
             });
 
-            spf_aceitaComandoPorTexto = (SwitchPreference) findPreference("spf_aceitaComandoPorTexto");
+
+                spf_aceitaComandoPorTexto = (SwitchPreference) findPreference("spf_aceitaComandoPorTexto");
+
+                spf_aceitaComandoPorTexto.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        try {
+                            Boolean aceita = (Boolean) newValue;
+                            Boolean status = DroidPrefsUtils.statusComandoPorTexto(context);
+                            if (aceita != status) {
+                                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                                canFinish = false;
+                            }
 
 
-            spf_aceitaComandoPorTexto.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    try {
-                        Boolean aceita = (Boolean) newValue;
-                        Boolean status = DroidPrefsUtils.statusComandoPorTexto(context);
-                        if (aceita != status) {
-                            startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                            canFinish = false;
+                        } catch (Exception ex) {
+                            Log.d("DVR", ex.getMessage());
                         }
-
-
-                    } catch (Exception ex) {
-                        Log.d("DVR", ex.getMessage());
+                        return true;
                     }
-                    return true;
-                }
-            });
+                });
+
+            if (sdk_int < 21) {
+
+                spf_aceitaComandoPorTexto.setEnabled(false);
+            }
 
         } else finish();
 
@@ -123,10 +131,18 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!ExibeTelaInicial() && !ChamadaPeloServico() && !ChamadaConfigPorComandoTexto()) {
-            finish();
-        } else {
-            spf_aceitaComandoPorTexto.setChecked(DroidPrefsUtils.statusComandoPorTexto(context));
+        try {
+            if (!ExibeTelaInicial() && !ChamadaPeloServico() && !ChamadaConfigPorComandoTexto()) {
+                finish();
+            } else {
+                if (sdk_int >= 21) {
+                    spf_aceitaComandoPorTexto.setChecked(DroidPrefsUtils.statusComandoPorTexto(context));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.d("DVR", ex.getMessage());
         }
     }
 

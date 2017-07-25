@@ -1,67 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/txt_tela_Config">
+    <PreferenceCategory
+        android:key="telaConfig"
+        android:title="@string/txt_tela_Config">
         <SwitchPreference
+            android:defaultValue="true"
             android:key="spf_exibeAoIniciar"
             android:summary="@string/spf_exibe_iniciar"
-            android:defaultValue="true"
-            android:title="@string/txt_titulo">
-        </SwitchPreference>
+            android:title="@string/txt_titulo"></SwitchPreference>
 
         <SwitchPreference
+            android:defaultValue="true"
             android:key="spf_exibeTempoGravacao"
             android:summary="@string/spf_exibe_tempo_gravacao"
-            android:title="@string/spf_titulo"
-            android:defaultValue="true">
-        </SwitchPreference>
+            android:title="@string/spf_titulo"></SwitchPreference>
 
         <ListPreference
-            android:key="ltp_qualidadeCameraTraseira"
-            android:summary="@string/txt_qualidade_camera_traseira"
-            android:title="@string/txt_camera_traseira"
+            android:defaultValue="0"
             android:entries="@array/qualidadeCameraTraseira"
             android:entryValues="@array/valor_qualidadeCameraTraseira"
-            android:defaultValue="0">
-        </ListPreference>
+            android:key="ltp_qualidadeCameraTraseira"
+            android:summary="@string/txt_qualidade_camera_traseira"
+            android:title="@string/txt_camera_traseira"></ListPreference>
 
         <ListPreference
-            android:key="ltp_qualidadeCameraFrontal"
-            android:summary="@string/txt_qualidade_camera_frontal"
-            android:title="@string/txt_camera_frontal"
+            android:defaultValue="0"
             android:entries="@array/qualidadeCameraFrontal"
             android:entryValues="@array/valor_qualidadeCameraFrontal"
-            android:defaultValue="0">
-        </ListPreference>
+            android:key="ltp_qualidadeCameraFrontal"
+            android:summary="@string/txt_qualidade_camera_frontal"
+            android:title="@string/txt_camera_frontal"></ListPreference>
 
         <ListPreference
-            android:key="ltp_localGravacaoVideo"
-            android:summary="@string/txt_local_gravacao_videos"
-            android:title="@string/txt_gravacao_videos"
+            android:defaultValue="0"
             android:entries="@array/localArquivosGravados"
             android:entryValues="@array/valor_localArquivosGravados"
-            android:defaultValue="0">
-        </ListPreference>
+            android:key="ltp_localGravacaoVideo"
+            android:summary="@string/txt_local_gravacao_videos"
+            android:title="@string/txt_gravacao_videos"></ListPreference>
 
         <SwitchPreference
+            android:defaultValue="false"
             android:key="spf_aceitaComandoPorVoz"
             android:summary="@string/aceitaComandoPorVoz"
-            android:defaultValue="false"
-            android:title="@string/escuta">
-        </SwitchPreference>
+            android:title="@string/escuta"></SwitchPreference>
 
         <SwitchPreference
+            android:defaultValue="false"
             android:key="spf_aceitaComandoPorTexto"
             android:summary="@string/aceitaComandoPorTexto"
-            android:defaultValue="false"
-            android:title="@string/comando">
-        </SwitchPreference>
+            android:title="@string/comando"></SwitchPreference>
 
         <SwitchPreference
+            android:defaultValue="false"
             android:key="spf_leComando"
             android:summary="@string/leComando"
-            android:defaultValue="false"
-            android:title="@string/fala">
-        </SwitchPreference>
+            android:title="@string/fala"></SwitchPreference>
 
     </PreferenceCategory>
 

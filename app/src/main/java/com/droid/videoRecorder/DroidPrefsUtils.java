@@ -79,8 +79,12 @@ public class DroidPrefsUtils {
     public static boolean statusComandoPorTexto(final Context context) {
         boolean spf = false;
         try {
-            spf = Settings.Secure.getString(context.getContentResolver(),"enabled_notification_listeners").contains(context.getApplicationContext().getPackageName());
+            String sett = Settings.Secure.getString(context.getContentResolver(),"enabled_notification_listeners");
 
+            if (sett != null)
+            {
+                spf = sett.contains(context.getApplicationContext().getPackageName());
+            }
         } catch (Exception ex) {
             Log.d("DroidVideo", ex.getMessage());
         }
