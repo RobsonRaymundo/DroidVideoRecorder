@@ -147,7 +147,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
         mSurfaceView.getHolder().setFixedSize(1, 1);
 
         chatHead = new ImageView(context);
-        chatHead.setImageResource(R.drawable.stoprec);
+        chatHead.setImageResource(R.mipmap.stoprec);
         txtHead = new TextView(context);
         txtHead.setText("00:00");
         txtHead.setVisibility(View.INVISIBLE);
@@ -391,7 +391,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     }
 
     private void ShowView() {
-        chatHead.setImageResource(R.drawable.viewrec);
+        chatHead.setImageResource(R.mipmap.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
         DroidVideoRecorder.OnInitRec(context.getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
@@ -400,7 +400,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     }
 
     private void ChangeTypeViewCam() {
-        chatHead.setImageResource(R.drawable.viewrec);
+        chatHead.setImageResource(R.mipmap.viewrec);
         mSurfaceView.getHolder().setFixedSize(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.MATCH_PARENT);
 
         if (DroidVideoRecorder.TypeViewCam == DroidConstants.EnumTypeViewCam.FacingBack) {
@@ -418,7 +418,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     }
 
     private void ShowRec() {
-        chatHead.setImageResource(R.drawable.rec);
+        chatHead.setImageResource(R.mipmap.rec);
         mSurfaceView.getHolder().setFixedSize(1, 1);
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidVideoRecorder.TypeViewCam);
         DroidVideoRecorder.OnStartRecording(mSurfaceView.getHolder(), orientationEvent, DroidPrefsUtils.obtemQualidadeCamera(this, DroidConstants.EnumTypeViewCam.FacingBack));
@@ -440,7 +440,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
 
     private void GetDefaultStop() {
         mSurfaceView.getHolder().setFixedSize(1, 1);
-        chatHead.setImageResource(R.drawable.stoprec);
+        chatHead.setImageResource(R.mipmap.stoprec);
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
         DroidVideoRecorder.OnInitRec(getResources().getConfiguration(), orientationEvent, DroidConstants.EnumTypeViewCam.FacingBack);
         DroidVideoRecorder.OnViewRec(mSurfaceView.getHolder());
@@ -448,12 +448,12 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     }
 
     private void ShowStop() {
-        chatHead.setImageResource(R.drawable.stoprec);
+        chatHead.setImageResource(R.mipmap.stoprec);
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.STOP;
     }
 
     private void ShowClose() {
-        chatHead.setImageResource(R.drawable.closerec);
+        chatHead.setImageResource(R.mipmap.closerec);
         DroidVideoRecorder.StateRecVideo = DroidConstants.EnumStateRecVideo.CLOSE;
         Vibrar(50);
     }
