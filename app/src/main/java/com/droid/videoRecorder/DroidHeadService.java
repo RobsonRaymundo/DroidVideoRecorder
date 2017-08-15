@@ -236,7 +236,8 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     }
 
     private void StopService() {
-        context.stopService(mIntentService);
+        //context.stopService(mIntentService);
+        stopSelf();
         tts.shutdown();
     }
 
