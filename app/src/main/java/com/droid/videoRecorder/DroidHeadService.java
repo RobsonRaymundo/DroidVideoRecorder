@@ -58,7 +58,7 @@ public class DroidHeadService extends Service implements TextToSpeech.OnInitList
     WindowManager.LayoutParams params = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_PHONE,
+            WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
 
